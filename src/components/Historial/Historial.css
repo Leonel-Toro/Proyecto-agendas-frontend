@@ -1,0 +1,23 @@
+.historial{
+    width: 80%;
+    margin-left: 250px;
+}
+
+.container-historial{
+    border-radius:10px;
+    margin: auto;
+    padding: 2rem;
+    height: 100%;
+}
+
+.card-historial{
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0;
+    border-radius: 10px;
+}
+
+.card-historial-header{
+    display: flex;
+    gap: 10px;
+    justify-content: end;
+}

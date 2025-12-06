@@ -1,0 +1,73 @@
+.inputLabel{
+    color: black;
+}
+
+.inputForm{
+    border-radius: 5px;
+    border: 1px solid #fff38b;
+    padding: .5rem;
+    transition: border ease-in .2s;
+}
+
+.inputForm:hover,.inputForm:focus-visible{
+    border: 2px solid #fff38b;
+    outline: none;
+}
+
+.selectForm{
+    border: 1px solid #fff38b;
+    outline: none;
+    height: 45px;
+    border-radius: 5px;
+    padding: .5rem;
+}
+
+.calendario {
+    width: 80%;         /* o 100%, lo que quieras para el wrapper */
+  }
+  
+  /* Apuntar a clases globales dentro del wrapper scopeado */
+  .calendario :global(.react-datepicker) {
+    width: 100% !important;      /* fuerza a ocupar el wrapper */
+  }
+
+  .calendario :global(.react-datepicker__header){
+    background-color: #fff38b !important;
+  }
+
+  .calendario :global(.react-datepicker__day--selected),
+  .calendario :global(.react-datepicker__time-list-item--selected){
+    background-color: black !important;
+  }
+
+  .calendario :global(.react-datepicker__day--keyboard-selected){
+    background-color: white;
+    border: 1px solid #fff38b;
+  }
+
+  .calendario :global(.react-datepicker__day--keyboard-selected:not([aria-disabled="true"]):hover){
+    background-color: #fff38b;
+  }
+  
+  .calendario :global(.react-datepicker__month-container) {
+    width: 80%;
+  }
+  
+  /* Si usas selector de hora, ajusta su ancho (opcional) */
+  .calendario :global(.react-datepicker__time-container) {
+    width: 20%;
+  }
+
+  .calendario :global(.react-datepicker__navigation){
+    right: 20% !important;
+  }
+
+  .calendario :global(.react-datepicker__time-box){
+    width: 100% !important;
+  }
+
+  .calendario :global(.react-datepicker__day), 
+  .calendario :global(.react-datepicker__day-name){
+    width: 4rem;
+  }
+  

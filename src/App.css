@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+#root{
+  width: 100%;
+}
+.header-container{
+  height: 100%;
+  background-color: #fff38b;
+  position: fixed;
+  left: 0;
+  width: 250px;
+  top: 0;
+}
+
+.main-container{
+  display: flex;
+  justify-content: center;
+  height: -webkit-fill-available;
+}
+
+.btn-primary{
+  background-color: #ffec46;
+  color: black;
+  border: 1px solid black;
+  padding: 10px 15px;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-bottom: .5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover{
+  background-color: #eadf7d;
+}

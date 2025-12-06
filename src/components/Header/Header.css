@@ -1,0 +1,17 @@
+.header ul{
+    list-style-type: none;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+ul li{
+    transition: all ease .5s;
+}
+
+ul li:hover{
+    background-color: #eadf7d;
+}
+
+
+
+  

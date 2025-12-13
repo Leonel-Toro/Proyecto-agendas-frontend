@@ -42,9 +42,20 @@ export default function Formulario() {
     async function enviarFormulario(e){        
         e.preventDefault();
         const payloadNormalizado = {
-            ...payload,
-            precio: Number(payload.precio)
+            precio: Number(payload.precio),
+            estado: payload.estado,
+            nombreProducto: payload.nombreProducto,
+            fechaReserva: payload.fechaReserva,
+            fechaTermino: payload.fechaReserva,
+            lugarEncuentro: payload.lugarEncuentro,
+            nombreCliente: payload.nombreCliente,
+            emailCliente: payload.emailCliente,
+            telefonoCliente: payload.telefonoCliente,
+            medioCliente: payload.medioCliente,
+            mensajePersonalizado: payload.mensajePersonalizado
         }
+        
+        console.log("Payload enviado a la API:", payloadNormalizado);
 
         try {
             const res = await fetch(`${urlBase}/reservas/agendar`, {
@@ -77,8 +88,11 @@ export default function Formulario() {
                 <div className="card">
                     <form >
                         <div className="card-details">
-                            <div className="mb-4">
-                                <span className="text-base font-semibold text-slate-900 rounded-[20px] bg-[#fff38b] p-[.7rem]">Datos del cliente</span>                                
+                            <div className="mb-6">
+                                <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-1 inline-flex items-center gap-2 shadow-md border border-blue-100">
+                                    <span className="w-1.5 h-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-full"></span>
+                                    <span className="text-base font-bold text-gray-800 pr-3">Datos del cliente</span>
+                                </div>                            
                             </div>
                             <div className="grid grid-cols-2 sm:grid-cols-1 my-[1rem] gap-3">
                                 <InputsForm titulo="Nombre" type="text" placeholder="Ej: Juan Perez" input="input" name="nombreCliente"  changePayload={handlePayload} value={payload.nombre}/>
@@ -86,15 +100,21 @@ export default function Formulario() {
                                 <InputsForm titulo="Teléfono" type="text" placeholder="+569 1234 5678" input="input" name="telefonoCliente"  changePayload={handlePayload} value={payload.telefonoCliente}/>
                                 <InputsForm titulo="Medio de contacto" input="select" name="medioCliente"  changePayload={handlePayload} value={payload.medioContacto}/>
                             </div>
-                            <div className="mt-[2rem] mb-[1.5rem]">
-                                <span className="text-base font-semibold text-slate-900 rounded-[20px] bg-[#fff38b] p-[.7rem]">Datos del pedido</span>                                
+                            <div className="mt-[2.5rem] mb-6">
+                                <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-1 inline-flex items-center gap-2 shadow-md border border-blue-100">
+                                    <span className="w-1.5 h-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-full"></span>
+                                    <span className="text-base font-bold text-gray-800 pr-3">Datos del pedido</span>
+                                </div>                             
                             </div>
                             <div className="grid grid-cols-2 my-[1rem] gap-3">
                                 <InputsForm titulo="Nombre del producto" input="input" type="text" name="nombreProducto" placeholder="Snoopy..."  changePayload={handlePayload} value={payload.nombreProducto}/>
                                 <InputsForm titulo="Estado" input="select"  changePayload={handlePayload} value={payload.estado} name="estado"/>
                             </div>   
-                            <div className="mt-[2rem] mb-[1.5rem]">
-                                <span className="text-base font-semibold text-slate-900 rounded-[20px] bg-[#fff38b] p-[.7rem]">Detalles de la reserva</span>  
+                            <div className="mt-[2.5rem] mb-6">
+                                <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-1 inline-flex items-center gap-2 shadow-md border border-blue-100">
+                                    <span className="w-1.5 h-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-full"></span>
+                                    <span className="text-base font-bold text-gray-800 pr-3">Detalles de la reserva</span>
+                                </div>  
                             </div>
                             <div className="grid grid-cols-1 my-[1rem] gap-3">
                                 <CalendarioHora name="fechaReserva"  changePayload={handlePayload} value={payload.fechaReserva}/>
@@ -108,7 +128,7 @@ export default function Formulario() {
                             </div>  
                         </div>
                         <div className="card-actions">
-                            <button className="btn btn-primary" onClick={enviarFormulario}>Reservar</button>
+                            <button className="px-8 py-3 bg-gradient-to-r from-blue-700 to-cyan-700 text-white rounded-full font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 w-full sm:w-auto" onClick={enviarFormulario}>Reservar</button>
                         </div>
                     </form>
                 </div>

@@ -1,6 +1,7 @@
 import React from "react";
+import AccionesReserva from "../AccionesReserva/AccionesReserva";
 
-export default function DetalleHistorial({ subtitulo, contenido = [] }) {
+export default function DetalleHistorial({ subtitulo, contenido = [], tab = "Historial", onVer, onEditar }) {
   const rows = Array.isArray(contenido) ? contenido : [];
 
   return (
@@ -17,17 +18,18 @@ export default function DetalleHistorial({ subtitulo, contenido = [] }) {
                 <tr>
                   {[
                     "Cliente",
-                    "Producto",
+                    "Teléfono",
                     "Medio",
                     "Precio",
                     "Lugar",
                     "Email",
                     "Reserva",
                     "Estado",
+                    "Acciones",
                   ].map((h) => (
                     <th
                       key={h}
-                      className="bg-[#fff38b] text-left font-bold text-black px-4 py-3"
+                      className="bg-gradient-to-r from-blue-700 to-cyan-600 text-left font-bold text-white px-4 py-3 first:rounded-tl-xl last:rounded-tr-xl"
                     >
                       {h}
                     </th>
@@ -38,13 +40,13 @@ export default function DetalleHistorial({ subtitulo, contenido = [] }) {
                 {rows.map((item, idx) => (
                   <tr
                     key={`${item.emailCliente || "row"}-${item.fechaReserva || idx}`}
-                    className="odd:bg-white even:bg-zinc-50 hover:bg-yellow-50 transition-colors"
+                    className="odd:bg-white even:bg-zinc-50 hover:bg-blue-50 transition-colors"
                   >
                     <td className="px-4 py-3 align-top">
                       {item.nombreCliente ?? "N/A"}
                     </td>
                     <td className="px-4 py-3 align-top">
-                      {item.nombreProducto ?? "N/A"}
+                      {item.telefonoCliente ?? "N/A"}
                     </td>
                     <td className="px-4 py-3 align-top">{item.medioCliente ?? "N/A"}</td>      
                     <td className="px-4 py-3 align-top">
@@ -61,8 +63,16 @@ export default function DetalleHistorial({ subtitulo, contenido = [] }) {
                     <td className="px-4 py-3 align-top">
                       {formateaFecha(item.fechaReserva)}
                     </td>
-                    <td className={`px-4 py-3 align-top ${item.estado.toLowerCase()}`}>
-                      {item.estado}
+                    <td className={`px-4 py-3 align-top font-semibold ${getEstadoClase(item.estado)}`}>
+                      {formatearEstado(item.estado)}
+                    </td>
+                    <td className="px-4 py-3 align-top">
+                      <AccionesReserva
+                        item={item}
+                        tab={tab}
+                        onVer={onVer}
+                        onEditar={onEditar}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -88,4 +98,24 @@ function formateaFecha(v) {
   if (!v) return "N/A";
   const d = new Date(v);
   return isNaN(d.getTime()) ? String(v) : d.toLocaleString("es-CL");
+}
+
+function formatearEstado(estado) {
+  const estadosMap = {
+    "PENDIENTE": "Pendiente",
+    "ABONADA": "Abonada",
+    "CANCELADA": "Cancelada",
+    "COMPLETADO": "Completado"
+  };
+  return estadosMap[estado] || estado;
+}
+
+function getEstadoClase(estado) {
+  const clasesMap = {
+    "PENDIENTE": "text-amber-600 bg-amber-50",
+    "ABONADA": "text-green-600 bg-green-50",
+    "CANCELADA": "text-red-600 bg-red-50",
+    "COMPLETADO": "text-blue-600 bg-blue-50"
+  };
+  return clasesMap[estado] || "";
 }

@@ -1,25 +1,46 @@
 .inputLabel{
-    color: black;
+    color: #374151;
+    font-weight: 600;
+    font-size: 0.875rem;
 }
 
 .inputForm{
-    border-radius: 5px;
-    border: 1px solid #fff38b;
-    padding: .5rem;
-    transition: border ease-in .2s;
+    border-radius: 0.75rem;
+    border: 2px solid #e5e7eb;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+    background-color: white;
+    font-size: 0.95rem;
 }
 
-.inputForm:hover,.inputForm:focus-visible{
-    border: 2px solid #fff38b;
+.inputForm:hover{
+    border-color: #bfdbfe;
+}
+
+.inputForm:focus-visible{
+    border-color: #1d4ed8;
     outline: none;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
 }
 
 .selectForm{
-    border: 1px solid #fff38b;
+    border: 2px solid #e5e7eb;
     outline: none;
-    height: 45px;
-    border-radius: 5px;
-    padding: .5rem;
+    height: 48px;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    background-color: white;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.selectForm:hover{
+    border-color: #bfdbfe;
+}
+
+.selectForm:focus{
+    border-color: #1d4ed8;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
 }
 
 .calendario {
@@ -32,21 +53,32 @@
   }
 
   .calendario :global(.react-datepicker__header){
-    background-color: #fff38b !important;
+    background: linear-gradient(to right, #1d4ed8, #0891b2) !important;
+    color: white !important;
+  }
+
+  .calendario :global(.react-datepicker__current-month),
+  .calendario :global(.react-datepicker__day-name){
+    color: white !important;
   }
 
   .calendario :global(.react-datepicker__day--selected),
   .calendario :global(.react-datepicker__time-list-item--selected){
-    background-color: black !important;
+    background-color: #1d4ed8 !important;
+    color: white !important;
   }
 
   .calendario :global(.react-datepicker__day--keyboard-selected){
     background-color: white;
-    border: 1px solid #fff38b;
+    border: 2px solid #bfdbfe;
   }
 
   .calendario :global(.react-datepicker__day--keyboard-selected:not([aria-disabled="true"]):hover){
-    background-color: #fff38b;
+    background-color: #dbeafe;
+  }
+
+  .calendario :global(.react-datepicker-time__header){
+    color: white !important;
   }
   
   .calendario :global(.react-datepicker__month-container) {

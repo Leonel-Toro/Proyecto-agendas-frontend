@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "firebase": "^12.6.0",
     "lucide-react": "^0.556.0",
     "react": "^19.1.0",
     "react-datepicker": "^8.5.0",

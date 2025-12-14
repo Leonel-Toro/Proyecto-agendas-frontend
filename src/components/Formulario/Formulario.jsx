@@ -60,13 +60,6 @@ export default function Formulario() {
                     error = "El estado es obligatorio";
                 }
                 break;
-            case "fechaReserva":
-                const ahora = new Date();
-                const fechaSeleccionada = new Date(value);
-                if (fechaSeleccionada <= ahora) {
-                    error = "La fecha y hora deben ser posteriores al momento actual";
-                }
-                break;
             case "lugarEncuentro":
                 if (!value || value.trim() === "") {
                     error = "El lugar de entrega es obligatorio";

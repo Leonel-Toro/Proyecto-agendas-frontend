@@ -18,11 +18,11 @@ export default function DetalleHistorial({ subtitulo, contenido = [], tab = "His
                 <tr>
                   {[
                     "Cliente",
-                    "Teléfono",
+                    "Email",
+                    "Lugar",
+                    //"Teléfono",
                     "Medio",
                     "Precio",
-                    "Lugar",
-                    "Email",
                     "Reserva",
                     "Estado",
                     "Acciones",
@@ -43,22 +43,22 @@ export default function DetalleHistorial({ subtitulo, contenido = [], tab = "His
                     className="odd:bg-white even:bg-zinc-50 hover:bg-blue-50 transition-colors"
                   >
                     <td className="px-4 py-3 align-top">
-                      {item.nombreCliente ?? "N/A"}
+                      {item.nombreCliente ?? "N/A"} 
                     </td>
                     <td className="px-4 py-3 align-top">
-                      {item.telefonoCliente ?? "N/A"}
+                      <span className="block max-w-[280px] truncate" title={item.emailCliente ?? ""}>
+                        {item.emailCliente ?? "N/A"}
+                      </span>
                     </td>
+                    {/*<td className="px-4 py-3 align-top">
+                      {item.telefonoCliente ?? "N/A"}
+                    </td>*/}
                     <td className="px-4 py-3 align-top">{item.medioCliente ?? "N/A"}</td>      
                     <td className="px-4 py-3 align-top">
                       {formateaPrecio(item.precio)}
                     </td>
                     <td className="px-4 py-3 align-top">
                       {item.lugarEncuentro ?? "N/A"}
-                    </td>
-                    <td className="px-4 py-3 align-top">
-                      <span className="block max-w-[280px] truncate" title={item.emailCliente ?? ""}>
-                        {item.emailCliente ?? "N/A"}
-                      </span>
                     </td>
                     <td className="px-4 py-3 align-top">
                       {formateaFecha(item.fechaReserva)}

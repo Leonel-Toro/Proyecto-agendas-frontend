@@ -1,0 +1,93 @@
+.modal-exito-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-exito-content {
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 28rem;
+  width: 100%;
+  padding: 3rem 2rem;
+  text-align: center;
+  animation: slideUp 0.3s ease-out;
+}
+
+.modal-exito-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  animation: scaleIn 0.4s ease-out 0.1s both;
+}
+
+.modal-exito-titulo {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.modal-exito-mensaje {
+  font-size: 1.125rem;
+  color: #4b5563;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.modal-exito-boton {
+  background: linear-gradient(to right, #1d4ed8, #0891b2);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.875rem 2.5rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+}
+
+.modal-exito-boton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(29, 78, 216, 0.4);
+}
+
+.modal-exito-boton:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -1,5 +1,7 @@
 import "./Historial.css";
 import DetallesHistorial from "../DetalleHistorial/DetalleHistorial";
+import DetalleReservaModal from "../DetalleReservaModal/DetalleReservaModal";
+import ModalExito from "../ModalExito/ModalExito";
 import BotonHeader from "../BotonHeader/BotonHeader";
 import { useEffect, useMemo, useState } from "react";
 import { LayoutList, Clock, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -18,7 +20,12 @@ export default function Historial() {
   const [items, setItems] = useState([]);
   const [tab, setTab] = useState("Historial");   
   const [loading, setLoading] = useState(true);
-  const [paginaActual, setPaginaActual] = useState(1);  
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [modoModal, setModoModal] = useState('ver'); // 'ver' o 'editar'
+  const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
+  const [modalExitoAbierto, setModalExitoAbierto] = useState(false);
+  const [mensajeExito, setMensajeExito] = useState('');
 
   useEffect(() => {
     let abort = false;
@@ -38,7 +45,6 @@ export default function Historial() {
         }
         if (!abort) {
           const registros = data?.entidad && Array.isArray(data.entidad) ? data.entidad : [];
-          // Normaliza estado y elimina duplicados por email+fechaReserva
           const map = new Map();
           registros.forEach((r) => {
             const email = String(r.emailCliente || '').trim().toLowerCase();
@@ -62,7 +68,7 @@ export default function Historial() {
 
   const filtrados = useMemo(() => {
     if (tab === "Historial") return items;
-    if (tab === "Pendientes") return items.filter(i => i.estado === "PENDIENTE");
+    if (tab === "Pendientes") return items.filter(i => ["ABONADA", "PENDIENTE"].includes(i.estado));
     if (tab === "Completados") return items.filter(i => ["PAGADA", "CANCELADA"].includes(i.estado));
     return items;
   }, [tab, items]);
@@ -93,7 +99,18 @@ export default function Historial() {
     }
   };
 
-  // Asegura que la página actual nunca quede fuera de rango al cambiar filtros/tabs
+  function estadoIdAString(estadoId) {
+    const mapa = {
+      1: 'PENDIENTE',
+      2: 'ABONADA',
+      3: 'CANCELADA',
+      4: 'NO_CONCRETADA',
+      5: 'PAGADA',
+      6: 'COMPLETADO'
+    };
+    return mapa[Number(estadoId)] || estadoId;
+  }
+
   useEffect(() => {
     if (paginaActual > totalPaginas && totalPaginas > 0) {
       setPaginaActual(totalPaginas);
@@ -104,13 +121,84 @@ export default function Historial() {
   }, [totalPaginas]);
 
   const handleVerReserva = (reserva) => {
-    console.log("Ver reserva:", reserva);
-    // TODO: Implementar modal/página de detalle
+    setReservaSeleccionada(reserva);
+    setModoModal('ver');
+    setModalAbierto(true);
   };
 
   const handleEditarReserva = (reserva) => {
-    console.log("Editar reserva:", reserva);
-    // TODO: Implementar modal/página de edición
+    setReservaSeleccionada(reserva);
+    setModoModal('editar');
+    setModalAbierto(true);
+  };
+
+  const handleGuardarReserva = async (reservaActualizada) => {
+    try {
+      const payloadNormalizado = {
+        id: reservaActualizada?.id,
+        precio: Number(reservaActualizada?.precio ?? 0),
+        estado: reservaActualizada?.estado ?? "",
+        nombreProducto: reservaActualizada?.nombreProducto ?? "",
+        fechaReserva: reservaActualizada?.fechaReserva ?? "",
+        fechaTermino: reservaActualizada?.fechaTermino ?? reservaActualizada?.fechaReserva ?? "",
+        lugarEncuentro: reservaActualizada?.lugarEncuentro ?? "",
+        nombreCliente: reservaActualizada?.nombreCliente ?? "",
+        emailCliente: reservaActualizada?.emailCliente ?? "",
+        telefonoCliente: reservaActualizada?.telefonoCliente ?? "",
+        medioCliente: reservaActualizada?.medioCliente ?? "",
+        mensajePersonalizado: reservaActualizada?.mensajePersonalizado ?? "",
+      };
+
+      const res = await fetch(`${urlBase}/reservas/editar`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payloadNormalizado),
+      });
+
+      const contentType = res.headers.get("content-type") || "";
+      const data = contentType.includes("application/json") ? await res.json() : await res.text();
+
+      if (!res.ok) {
+        const mensaje = typeof data === 'string' ? data : (data?.mensaje || data?.message || 'Error al editar la reserva');
+        console.error("Error al editar reserva:", res.status, mensaje);
+        throw new Error(mensaje);
+      }
+
+      // Cerrar modal de edición
+      setModalAbierto(false);
+      
+      setItems(prevItems => {
+        const index = prevItems.findIndex(item => item.id === reservaActualizada.id);
+        if (index !== -1) {
+          const newItems = [...prevItems];
+          newItems[index] = { ...reservaActualizada, estado: String(estadoIdAString(reservaActualizada.estado)).trim().toUpperCase() };
+          return newItems;
+        }
+        return prevItems;
+      });
+
+      // Mostrar modal de éxito
+      const mensajeRespuesta = typeof data === 'object' && data?.mensaje 
+        ? data.mensaje 
+        : 'La reserva se ha actualizado correctamente';
+      setMensajeExito(mensajeRespuesta);
+      setModalExitoAbierto(true);
+      
+    } catch (e) {
+      console.error("Error de red al editar reserva:", e);
+      throw e;
+
+    }
+  };
+
+  const handleCerrarModalExito = () => {
+    setModalExitoAbierto(false);
+    setMensajeExito('');
+  };
+
+  const handleCerrarModal = () => {
+    setModalAbierto(false);
+    setReservaSeleccionada(null);
   };
 
   return (
@@ -192,6 +280,24 @@ export default function Historial() {
           )}
         </div>
       </div>
+
+      {/* Modal de Detalle/Edición */}
+      {modalAbierto && (
+        <DetalleReservaModal
+          reserva={reservaSeleccionada}
+          modo={modoModal}
+          onClose={handleCerrarModal}
+          onGuardar={handleGuardarReserva}
+        />
+      )}
+
+      {/* Modal de Éxito */}
+      {modalExitoAbierto && (
+        <ModalExito
+          mensaje={mensajeExito}
+          onClose={handleCerrarModalExito}
+        />
+      )}
     </section>
   );
 }

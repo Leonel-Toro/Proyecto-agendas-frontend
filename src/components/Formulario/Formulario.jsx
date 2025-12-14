@@ -19,7 +19,8 @@ export default function Formulario() {
         fechaReserva: new Date(),
         lugarEncuentro: "",
         precio: 0,
-        mensajePersonalizado: ""
+        mensajePersonalizado: "",
+        abonado: 0
     });
     const [errorMessage, setErrorMessage] = useState("");
     const [modalExitoAbierto, setModalExitoAbierto] = useState(false);
@@ -31,7 +32,8 @@ export default function Formulario() {
         estado: "",
         fechaReserva: "",
         lugarEncuentro: "",
-        precio: ""
+        precio: "",
+        abonado: ""
     });
 
     function validateField(name, value) {
@@ -65,6 +67,16 @@ export default function Formulario() {
                     error = "El lugar de entrega es obligatorio";
                 }
                 break;
+            case "abonado":
+                const abonadoNum = Number(value);
+                if (value === "" || value === "0") {
+                    error = "El precio es obligatorio";
+                } else if (abonadoNum <= 0) {
+                    error = "El precio debe ser mayor a 0";
+                } else if (abonadoNum > Number(payload.precio)) {
+                    error = "El abonado no puede ser mayor al precio total";
+                }
+                break;
             case "precio":
                 const precioNum = Number(value);
                 if (value === "" || value === "0") {
@@ -87,7 +99,7 @@ export default function Formulario() {
         const name = inputEvent.target !== undefined ? inputEvent.target.name : inputEvent.name;
         let value = inputEvent.target !== undefined ? inputEvent.target.value : inputEvent.value;
         
-        if (name === "precio" || name === "telefonoCliente") {
+        if (name === "precio" || name === "telefonoCliente" || name === "abonado") {
             const soloNum = value.replace(/\D/g, "");
             if (soloNum !== value) {
                 return;
@@ -115,7 +127,8 @@ export default function Formulario() {
             { name: "estado", value: payload.estado },
             { name: "fechaReserva", value: payload.fechaReserva },
             { name: "lugarEncuentro", value: payload.lugarEncuentro },
-            { name: "precio", value: payload.precio }
+            { name: "precio", value: payload.precio },
+            { name: "abonado", value: payload.abonado }
         ];
         
         let hayErrores = false;
@@ -130,6 +143,8 @@ export default function Formulario() {
         }
         const payloadNormalizado = {
             precio: Number(payload.precio),
+            abonado: Number(payload.abonado),
+            abono: Number(payload.abonado), // nuevo campo requerido por backend
             estado: payload.estado,
             nombreProducto: payload.nombreProducto,
             fechaReserva: payload.fechaReserva,
@@ -258,10 +273,14 @@ export default function Formulario() {
                                     {errors.fechaReserva && <p className="text-red-500 text-xs mt-1 ml-1">{errors.fechaReserva}</p>}
                                 </div>
                             </div>                              
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-3 gap-3">
                                 <div>
                                     <InputsForm titulo="Lugar de entrega" type="text" input="input" placeholder="Ej: Metro El bosque" name="lugarEncuentro"  changePayload={handlePayload} value={payload.lugarEncuentro} />
                                     {errors.lugarEncuentro && <p className="text-red-500 text-xs mt-1 ml-1">{errors.lugarEncuentro}</p>}
+                                </div>
+                                <div>
+                                    <InputsForm titulo="Abonado" type="text" placeholder="Ej:$10000" input="input"  changePayload={handlePayload} value={payload.abonado} name="abonado"/>
+                                    {errors.abonado && <p className="text-red-500 text-xs mt-1 ml-1">{errors.abonado}</p>}
                                 </div>
                                 <div>
                                     <InputsForm titulo="Precio total" type="text" placeholder="Ej:$10000" input="input"  changePayload={handlePayload} value={payload.precio} name="precio"/>

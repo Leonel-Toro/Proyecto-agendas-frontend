@@ -13,13 +13,15 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
     estado: '',
     fechaTermino: null,
     lugarEncuentro: '',
-    precio: '',
+    precio: 0,
+    abonado: 0,
     mensajePersonalizado: '',
   });
   const [errors, setErrors] = useState({
     nombreProducto: '',
     estado: '',
     precio: '',
+    abonado: '',
     fechaTermino: ''
   });
   const [errorMessage, setErrorMessage] = useState('');
@@ -27,6 +29,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
     nombreProducto: false,
     estado: false,
     precio: false,
+    abonado: false,
     fechaTermino: false,
   });
 
@@ -37,7 +40,8 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
         estado: estadoStringAId(reserva.estado),
         fechaTermino: reserva.fechaTermino ? new Date(reserva.fechaTermino) : null,
         lugarEncuentro: reserva.lugarEncuentro || '',
-        precio: reserva.precio || '',
+        precio: reserva.precio || 0,
+        abonado: reserva.abonado || 0,
         mensajePersonalizado: reserva.mensajePersonalizado || '',
       });
     }
@@ -45,12 +49,17 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const nextState = { ...formData, [name]: value };
+
+    setFormData(nextState);
     setTouched(prev => ({ ...prev, [name]: true }));
-    validateField(name, value);
+
+    validateField(name, value, nextState);
+
+    // Revalida abono cuando cambia el precio para capturar n > precio
+    if (name === 'precio') {
+      validateField('abonado', nextState.abonado, nextState);
+    }
   };
 
   const handleDateChange = (date) => {
@@ -62,13 +71,22 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
     validateField('fechaTermino', date);
   };
 
-  function validateField(name, value) {
+  function validateField(name, value, nextState = {}) {
     let error = '';
+    const precioActual = nextState.precio ?? formData.precio;
     if (name === 'nombreProducto') {
       if (!value || value.trim() === '') error = 'El nombre del producto es obligatorio';
     }
     if (name === 'estado') {
       if (!value || value === '' || value === '0') error = 'El estado es obligatorio';
+    }
+    if (name === 'abonado') {
+      const n = Number(value);
+      if (value === '' || isNaN(n)) { error = 'El abonado es obligatorio'; }
+      else if (n < 0) { error = 'El abonado no puede ser negativo'; }
+      else if (n > Number(precioActual)) {
+        error = 'El abonado no puede ser mayor al precio';
+      }
     }
     if (name === 'precio') {
       const n = Number(value);
@@ -76,11 +94,9 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
       else if (n < 1) error = 'El precio debe ser mayor o igual a 1';
     }
     if (name === 'fechaTermino') {
-      // Si no hay valor, no mostrar error (solo se valida cuando existe)
       if (!value) {
         error = '';
       } else {
-        // value es un Date object
         const fin = value instanceof Date ? value : new Date(value);
         const inicio = new Date(reserva?.fechaReserva);
         if (isNaN(fin.getTime())) error = 'Fecha de entrega inválida';
@@ -98,7 +114,8 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
           ...reserva,
           ...formData,
           estado:formData.estado,
-          precio: parseFloat(formData.precio) || reserva.precio
+          precio: parseFloat(formData.precio) || reserva.precio,
+          abonado: parseFloat(formData.abonado) || reserva.abonado,
         });
       } catch (e) {
         const mensaje = e?.message || 'Ha ocurrido un error al guardar';
@@ -206,7 +223,6 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                 )}
               </div>
               <div>
-                
                 {modo === 'ver' ? (
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -283,7 +299,30 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                 />
               )}
             </div>
-
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Monto Abonado
+              </label>
+              {modo === 'ver' ? (
+                <p className="text-gray-900 font-semibold">{formateaPrecio(formData.abonado)}</p>
+              ) : (
+                <>
+                  <input
+                    type="number"
+                    name="abonado"
+                    value={formData.abonado}
+                    onChange={handleInputChange}
+                    placeholder="Ingrese monto abonado"
+                    min={1}
+                    step={1}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  {touched.abonado && errors.abonado && (
+                    <p className="text-red-500 text-xs mt-1 ml-1">{errors.abonado}</p>
+                  )}
+                </>
+              )}
+            </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Precio Total
@@ -308,7 +347,6 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                 </>
               )}
             </div>
-
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Mensaje Personalizado

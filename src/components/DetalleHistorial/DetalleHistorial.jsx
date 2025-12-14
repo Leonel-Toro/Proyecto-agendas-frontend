@@ -22,6 +22,7 @@ export default function DetalleHistorial({ subtitulo, contenido = [], tab = "His
                     "Lugar",
                     //"Teléfono",
                     "Medio",
+                    "Abonado",
                     "Precio",
                     "Reserva",
                     "Estado",
@@ -53,12 +54,15 @@ export default function DetalleHistorial({ subtitulo, contenido = [], tab = "His
                     {/*<td className="px-4 py-3 align-top">
                       {item.telefonoCliente ?? "N/A"}
                     </td>*/}
-                    <td className="px-4 py-3 align-top">{item.medioCliente ?? "N/A"}</td>      
-                    <td className="px-4 py-3 align-top">
-                      {formateaPrecio(item.precio)}
-                    </td>
                     <td className="px-4 py-3 align-top">
                       {item.lugarEncuentro ?? "N/A"}
+                    </td>
+                    <td className="px-4 py-3 align-top">{item.medioCliente ?? "N/A"}</td>    
+                    <td className="px-4 py-3 align-top">
+                      {formateaPrecio(item.abonado ?? 0)}
+                    </td>  
+                    <td className="px-4 py-3 align-top">
+                      {formateaPrecio(item.precio)}
                     </td>
                     <td className="px-4 py-3 align-top">
                       {formateaFecha(item.fechaReserva)}

@@ -22,7 +22,7 @@ export default function Historial() {
   const [loading, setLoading] = useState(true);
   const [paginaActual, setPaginaActual] = useState(1);
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [modoModal, setModoModal] = useState('ver'); // 'ver' o 'editar'
+  const [modoModal, setModoModal] = useState('ver');
   const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
   const [modalExitoAbierto, setModalExitoAbierto] = useState(false);
   const [mensajeExito, setMensajeExito] = useState('');
@@ -137,6 +137,8 @@ export default function Historial() {
       const payloadNormalizado = {
         id: reservaActualizada?.id,
         precio: Number(reservaActualizada?.precio ?? 0),
+        abonado: Number(reservaActualizada?.abonado ?? 0),
+        abonado: Number(reservaActualizada?.abonado ?? 0), // enviar nuevo atributo requerido
         estado: reservaActualizada?.estado ?? "",
         nombreProducto: reservaActualizada?.nombreProducto ?? "",
         fechaReserva: reservaActualizada?.fechaReserva ?? "",

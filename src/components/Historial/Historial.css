@@ -1,48 +1,60 @@
+/* ============================================
+   HISTORIAL (Sistema wellness-card)
+   ============================================ */
 .historial {
     width: 100%;
-    max-width: 1400px;
+    max-width: 1400px; /* max-w-8xl */
     margin: 0 auto;
-    padding: 0 1rem;
-    animation: slideInUp 0.5s ease-out;
+    padding: 0 1rem; /* px-4 */
+    animation: slideInUp 0.5s ease-out; /* animate-fade-in */
 }
 
+/* Contenedor principal con efecto vidrio */
 .container-historial {
-    border-radius: 1rem;
+    border-radius: 1.5rem; /* rounded-3xl = 24px */
     margin: 0 auto;
-    padding: 2rem;
+    padding: 2rem; /* padding-card = 32px */
     height: 100%;
-    background: white;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.8); /* bg-white/80 glass-effect */
+    backdrop-filter: blur(4px); /* backdrop-blur-sm */
+    -webkit-backdrop-filter: blur(4px); /* Safari */
+    border: 1px solid rgba(232, 223, 208, 0.3); /* border-[#E8DFD0]/30 */
+    box-shadow: 0 4px 20px -4px rgba(74,66,56,0.05); /* shadow-card-normal */
+    transition: all 0.5s ease-out; /* duration-500 */
 }
 
 .container-historial:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px); /* hover-lift */
 }
 
+/* Tarjetas individuales del historial */
 .card-historial {
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    background-color: #f8fafc;
-    border-radius: 0.75rem;
-    transition: all 0.3s ease;
+    background-color: rgba(255,255,255,0.9); /* bg-white/90 */
+    border-radius: 1rem; /* rounded-2xl = 16px */
+    transition: all 0.3s ease-out; /* transition-standard */
     overflow: hidden;
 }
 
 .card-historial:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(212,165,154, 0.2); /* shadow terracota */
+    transform: translateY(-2px); /* hover-lift */
+    border-color: rgba(212, 165, 154, 0.3); /* border-terracota */
 }
 
+/* Header de tarjetas con flex-end */
 .card-historial-header {
     display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
+    gap: 0.75rem; /* gap-3 */
+    justify-content: flex-end; /* justify-end */
     flex-wrap: wrap;
 }
 
+/* ============================================
+   ANIMACIONES (fade-in del sistema)
+   ============================================ */
 @keyframes slideInUp {
     from {
-        transform: translateY(30px);
+        transform: translateY(10px); /* Aparece desde 10px abajo */
         opacity: 0;
     }
     to {
@@ -71,11 +83,11 @@
     
     .container-historial {
         padding: 1.25rem;
-        border-radius: 0.75rem;
+        border-radius: 1rem;
     }
     
     .card-historial {
-        border-radius: 0.5rem;
+        border-radius: 1rem;
     }
     
     .card-historial-header {
@@ -92,15 +104,20 @@
     
     .container-historial {
         padding: 1rem;
-        border-radius: 0.5rem;
+        border-radius: 1rem;
     }
     
     .card-historial-header {
         flex-direction: column;
         gap: 0.5rem;
+        justify-content: center;
     }
     
     .card-historial-header button {
         width: 100%;
     }
 }
+
+/* ============================================
+   FIN DE HISTORIAL.CSS - Sistema de diseño cálido aplicado
+   ============================================ */

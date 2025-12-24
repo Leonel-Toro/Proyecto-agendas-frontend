@@ -1,53 +1,56 @@
+/* ============================================
+   INPUTS FORM (Sistema de formularios cálido)
+   ============================================ */
 .inputLabel {
-    color: #374151;
-    font-weight: 600;
-    font-size: 0.875rem;
-    transition: color 0.2s ease;
+  color: var(--color-text-brown); /* #4A4238 marrón principal */
+  font-weight: 600; /* font-semibold */
+  font-size: 0.875rem; /* text-sm = 14px */
+  transition: color 0.3s ease-out; /* transition-colors */
 }
 
 .inputForm {
-    border-radius: 0.75rem;
-    border: 2px solid #e5e7eb;
-    padding: 0.75rem 1rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background-color: white;
-    font-size: 0.95rem;
-    width: 100%;
+  border-radius: 1rem; /* rounded-2xl = 16px */
+  border: 2px solid rgba(232, 223, 208, 0.6); /* border-[#E8DFD0]/60 beige medio */
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  transition: all 0.3s ease-out; /* transition-standard */
+  background-color: rgba(255,255,255,0.8); /* bg-white/80 glass-effect */
+  font-size: 0.95rem; /* text-base */
+  width: 100%;
 }
 
 .inputForm:hover {
-    border-color: #bfdbfe;
-    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.08);
+  border-color: var(--color-accent-beige); /* #E8DFD0 hover beige */
+  box-shadow: 0 4px 20px -4px rgba(74,66,56,0.05); /* shadow-card-normal */
 }
 
 .inputForm:focus-visible {
-    border-color: #1d4ed8;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
-    transform: translateY(-1px);
+  border-color: var(--color-accent-terra); /* #D4A59A terracota focus */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212,165,154,0.15); /* focus-ring terracota */
+  transform: translateY(-1px); /* hover-lift sutil */
 }
 
 .selectForm {
-    border: 2px solid #e5e7eb;
-    outline: none;
-    height: 48px;
-    border-radius: 0.75rem;
-    padding: 0.75rem 1rem;
-    background-color: white;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-size: 0.95rem;
-    width: 100%;
+  border: 2px solid rgba(232, 223, 208, 0.6); /* border-[#E8DFD0]/60 */
+  outline: none;
+  height: 48px;
+  border-radius: 1rem; /* rounded-2xl = 16px */
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  background-color: rgba(255,255,255,0.8); /* bg-white/80 */
+  transition: all 0.3s ease-out; /* transition-standard */
+  font-size: 0.95rem;
+  width: 100%;
 }
 
 .selectForm:hover {
-    border-color: #bfdbfe;
-    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.08);
+  border-color: var(--color-accent-beige); /* #E8DFD0 hover */
+  box-shadow: 0 4px 20px -4px rgba(74,66,56,0.05); /* shadow-card-normal */
 }
 
 .selectForm:focus {
-    border-color: #1d4ed8;
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
-    transform: translateY(-1px);
+  border-color: var(--color-accent-terra); /* #D4A59A focus terracota */
+  box-shadow: 0 0 0 3px rgba(212,165,154,0.15); /* focus-ring */
+  transform: translateY(-1px); /* hover-lift */
 }
 
 /* Responsividad para móviles */
@@ -76,7 +79,7 @@
     .selectForm {
         font-size: 0.8125rem;
         padding: 0.5rem 0.75rem;
-        border-radius: 0.5rem;
+        border-radius: 1rem;
     }
     
     .selectForm {
@@ -94,7 +97,7 @@
   }
 
   .calendario :global(.react-datepicker__header){
-    background: linear-gradient(to right, #1d4ed8, #0891b2) !important;
+    background: var(--color-text-brown) !important;
     color: white !important;
   }
 
@@ -105,17 +108,17 @@
 
   .calendario :global(.react-datepicker__day--selected),
   .calendario :global(.react-datepicker__time-list-item--selected){
-    background-color: #1d4ed8 !important;
+    background-color: var(--color-accent-terra) !important;
     color: white !important;
   }
 
   .calendario :global(.react-datepicker__day--keyboard-selected){
     background-color: white;
-    border: 2px solid #bfdbfe;
+    border: 2px solid var(--color-accent-beige);
   }
 
   .calendario :global(.react-datepicker__day--keyboard-selected:not([aria-disabled="true"]):hover){
-    background-color: #dbeafe;
+    background-color: var(--color-accent-yellow);
   }
 
   .calendario :global(.react-datepicker-time__header){

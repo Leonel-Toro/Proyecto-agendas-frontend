@@ -13,15 +13,17 @@
   min-height: 100vh;
 }
 
-/* Header/Sidebar Container */
+/* ============================================
+   HEADER/SIDEBAR CONTAINER
+   ============================================ */
 .header-container {
   height: 100vh;
-  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%);
+  background: var(--color-text-brown); /* #4A4238 marrón principal */
   position: fixed;
   left: 0;
   top: 0;
   z-index: 1000;
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 4px 0 20px rgba(74, 66, 56, 0.15);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
@@ -34,15 +36,17 @@
   width: 70px;
 }
 
-/* Main Container */
+/* ============================================
+   MAIN CONTAINER (Contenedor principal)
+   ============================================ */
 .main-container {
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  padding: 2rem 1rem;
+  padding: 2rem 1rem; /* py-8 px-4 */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);
-  width: calc(100% - 70px); /* ajusta al ancho del sidebar cerrado por defecto */
+  background: var(--color-bg-warm); /* #FAF8F3 fondo cálido beige */
+  width: calc(100% - 70px); /* Ajusta al sidebar cerrado */
 }
 
 .main-container.sidebar-abierto {
@@ -55,46 +59,44 @@
   width: calc(100% - 70px);
 }
 
-/* Botón primario mejorado */
+/* ============================================
+   BOTÓN PRIMARIO (Con sistema de diseño cálido)
+   ============================================ */
 .btn-primary {
-  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%);
+  background: var(--color-text-brown); /* #4A4238 marrón oscuro */
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem; /* py-3 px-6 */
+  border-radius: 1rem; /* rounded-2xl = 16px */
   cursor: pointer;
   margin-bottom: 0.5rem;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  font-size: 1rem;
-  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+  transition: all 0.3s ease-out; /* duration-300 */
+  font-weight: 600; /* font-semibold */
+  font-size: 1rem; /* text-base = 16px */
+  box-shadow: 0 4px 20px -4px rgba(74,66,56,0.05); /* shadow-card-normal */
   position: relative;
   overflow: hidden;
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.btn-primary:hover::before {
-  left: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* gap-2 */
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(29, 78, 216, 0.4);
+  transform: translateY(-2px); /* hover lift */
+  box-shadow: 0 8px 30px -4px rgba(212,165,154,0.15); /* shadow-card-hover terracota */
+  background: var(--color-brown-medium); /* #6B5D52 hover más claro */
 }
 
 .btn-primary:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.3);
+  transform: translateY(0) scale(0.98); /* active-state scale-98 */
+  box-shadow: 0 2px 8px rgba(74,66,56,0.12);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-accent-terra); /* #D4A59A terracota */
+  outline-offset: 2px;
+  border-radius: 0.5rem;
 }
 
 /* Responsividad para tablets */

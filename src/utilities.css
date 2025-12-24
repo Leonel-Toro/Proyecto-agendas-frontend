@@ -1,0 +1,1078 @@
+/* ============================================
+   SISTEMA DE BOTONES AVANZADO
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   BOTONES DE ESTADO DE ÁNIMO (Mood Buttons)
+   ───────────────────────────────────────────── */
+.mood-button {
+  padding: 0.75rem; /* p-3 = 12px */
+  border-radius: 1rem; /* rounded-2xl = 16px */
+  transition: all 0.3s ease-out; /* duration-300 */
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #8C8174; /* text-[#8C8174] no seleccionado */
+}
+
+.mood-button:hover:not(.selected) {
+  background-color: #FAF8F3; /* hover:bg-[#FAF8F3] */
+  transform: scale(1.05); /* hover:scale-105 */
+}
+
+/* Estados seleccionados de mood */
+.mood-button.great,
+.mood-button.selected.great {
+  background-color: #FDE68A; /* bg-[#FDE68A] */
+  color: #92400E; /* text-[#92400E] */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* shadow-md */
+  transform: scale(1.05); /* scale-105 */
+}
+
+.mood-button.good,
+.mood-button.selected.good {
+  background-color: #A8B5A0; /* bg-[#A8B5A0] */
+  color: #3F4F3A; /* text-[#3F4F3A] */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.mood-button.okay,
+.mood-button.selected.okay {
+  background-color: #E8DFD0; /* bg-[#E8DFD0] */
+  color: #5C5446; /* text-[#5C5446] */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.mood-button.low,
+.mood-button.selected.low {
+  background-color: #D4A59A; /* bg-[#D4A59A] */
+  color: #5C3D36; /* text-[#5C3D36] */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.mood-button.rough,
+.mood-button.selected.rough {
+  background-color: #9CA3AF; /* bg-[#9CA3AF] */
+  color: #374151; /* text-[#374151] */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+/* Contenedor de icono con fondo semi-transparente */
+.mood-button.selected .icon-wrapper,
+.mood-button.selected .mood-icon-wrapper {
+  background-color: rgba(255, 255, 255, 0.3); /* bg-white/30 */
+  border-radius: 9999px; /* rounded-full */
+  padding: 0.5rem;
+}
+
+/* ─────────────────────────────────────────────
+   BOTONES DE NAVEGACIÓN (Header)
+   ───────────────────────────────────────────── */
+.nav-button {
+  background: transparent;
+  border: none;
+  padding: 0.5rem; /* p-2 = 8px */
+  border-radius: 9999px; /* rounded-full */
+  color: #8C8174; /* text-[#8C8174] */
+  cursor: pointer;
+  transition: all 0.3s ease-out; /* transition-colors */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-button:hover {
+  background-color: rgba(232, 223, 208, 0.3); /* hover:bg-[#E8DFD0]/30 */
+  color: #4A4238; /* hover:text-[#4A4238] */
+}
+
+.nav-button.active {
+  color: #4A4238;
+  font-weight: 600;
+}
+
+/* ─────────────────────────────────────────────
+   BOTONES DE ACCIÓN/CTA
+   ───────────────────────────────────────────── */
+.cta-button {
+  color: #D4A59A; /* text-[#D4A59A] terracota */
+  padding: 0.75rem 0; /* py-3 = 12px */
+  font-size: 0.875rem; /* text-sm = 14px */
+  font-weight: 600; /* font-semibold */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease-out; /* transition-colors */
+}
+
+.cta-button:hover {
+  color: #B5857B; /* hover:text-[#B5857B] terracota más oscuro */
+}
+
+/* ─────────────────────────────────────────────
+   AVATAR/PERFIL
+   ───────────────────────────────────────────── */
+.avatar {
+  width: 2rem; /* w-8 = 32px */
+  height: 2rem; /* h-8 = 32px */
+  background-color: #A8B5A0; /* bg-[#A8B5A0] verde salvia */
+  color: white; /* text-white */
+  font-weight: 700; /* font-bold */
+  font-size: 0.875rem; /* text-sm = 14px */
+  border-radius: 9999px; /* rounded-full */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   SISTEMA DE GRIDS Y TABLAS
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   GRID PRINCIPAL (Layout Desktop/Móvil)
+   ───────────────────────────────────────────── */
+.grid-main {
+  display: grid;
+  grid-template-columns: 1fr; /* grid-cols-1 en móvil */
+  gap: 2rem; /* gap-8 = 32px */
+}
+
+@media (min-width: 1024px) {
+  .grid-main {
+    grid-template-columns: repeat(12, 1fr); /* grid-cols-12 en desktop */
+  }
+  
+  .grid-main-left {
+    grid-column: span 8; /* lg:col-span-8 = 66.6% */
+  }
+  
+  .grid-main-right {
+    grid-column: span 4; /* lg:col-span-4 = 33.3% */
+  }
+}
+
+/* ─────────────────────────────────────────────
+   GRID DE BOTONES DE ESTADO (5 columnas)
+   ───────────────────────────────────────────── */
+.mood-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* grid-cols-5 */
+  gap: 0.5rem; /* gap-2 = 8px en móvil */
+}
+
+@media (min-width: 768px) {
+  .mood-grid {
+    gap: 1rem; /* md:gap-4 = 16px en desktop */
+  }
+}
+
+/* ─────────────────────────────────────────────
+   GRID DE TARJETAS (2 columnas responsive)
+   ───────────────────────────────────────────── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* grid-cols-1 en móvil */
+  gap: 2rem; /* gap-8 = 32px */
+}
+
+@media (min-width: 768px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr); /* md:grid-cols-2 */
+  }
+}
+
+/* ─────────────────────────────────────────────
+   TABLA DE DÍAS (Streak Calendar - 7 días)
+   ───────────────────────────────────────────── */
+.streak-calendar {
+  display: flex;
+  justify-content: space-between; /* Distribuir uniformemente M T W T F S S */
+  gap: 0.25rem;
+}
+
+.streak-day {
+  width: 2rem; /* w-8 = 32px */
+  height: 2rem; /* h-8 = 32px */
+  border-radius: 9999px; /* rounded-full */
+  font-size: 0.75rem; /* text-xs = 12px */
+  font-weight: 700; /* font-bold */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-out;
+}
+
+.streak-day.active {
+  background-color: #D4A59A; /* bg-[#D4A59A] */
+  color: white; /* text-white */
+}
+
+.streak-day.inactive {
+  background-color: rgba(255, 255, 255, 0.1); /* bg-white/10 */
+  color: rgba(255, 255, 255, 0.5); /* text-white/50 */
+}
+
+/* ─────────────────────────────────────────────
+   GRÁFICO DE BARRAS (Weekly Flow - altura 192px)
+   ───────────────────────────────────────────── */
+.weekly-flow {
+  height: 12rem; /* h-48 = 192px */
+  display: flex;
+  align-items: flex-end; /* items-end para barras desde abajo */
+  justify-content: space-between;
+  gap: 0.5rem; /* gap-2 = 8px móvil */
+}
+
+@media (min-width: 768px) {
+  .weekly-flow {
+    gap: 1rem; /* md:gap-4 = 16px desktop */
+  }
+}
+
+.flow-bar {
+  max-width: 24px; /* max-w-[24px] */
+  width: 100%;
+  border-radius: 9999px; /* rounded-full */
+  opacity: 0.8; /* opacity-80 */
+  transition: all 0.7s ease-out; /* duration-700 ease-out */
+}
+
+.flow-bar:hover {
+  opacity: 1; /* group-hover:opacity-80 → hover pleno */
+}
+
+/* ============================================
+   ICONOS - TAMAÑOS Y CONTEXTOS
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   TAMAÑOS DE ICONOS
+   ───────────────────────────────────────────── */
+.icon-small {
+  width: 1.25rem; /* w-5 = 20px (navegación, tips) */
+  height: 1.25rem; /* h-5 = 20px */
+}
+
+.icon-medium {
+  width: 1.5rem; /* w-6 = 24px (botones de mood) */
+  height: 1.5rem; /* h-6 = 24px */
+}
+
+.icon-large {
+  width: 2rem; /* w-8 = 32px */
+  height: 2rem; /* h-8 = 32px */
+}
+
+/* ─────────────────────────────────────────────
+   LOGO ICON (Heart con relleno)
+   ───────────────────────────────────────────── */
+.logo-icon-wrapper {
+  background-color: #D4A59A; /* bg-[#D4A59A] */
+  padding: 0.5rem; /* p-2 = 8px */
+  border-radius: 0.75rem; /* rounded-xl = 12px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon-wrapper svg {
+  color: white; /* text-white */
+  fill: currentColor; /* fill-current para relleno sólido */
+}
+
+/* ─────────────────────────────────────────────
+   MOOD ICONS (Iconos de estado de ánimo)
+   ───────────────────────────────────────────── */
+.mood-icon {
+  color: #8C8174; /* text-[#8C8174] no seleccionado */
+  padding: 0.75rem; /* p-3 = 12px */
+  border-radius: 9999px; /* rounded-full */
+  transition: all 0.3s ease-out; /* transition-colors */
+}
+
+.mood-button.selected .mood-icon {
+  color: inherit; /* Hereda color del botón padre */
+}
+
+/* ─────────────────────────────────────────────
+   TIPS ICONS (Iconos de consejos de bienestar)
+   ───────────────────────────────────────────── */
+.tip-icon-nature {
+  background-color: rgba(168, 181, 160, 0.2); /* bg-[#A8B5A0]/20 */
+  color: #5F7455; /* text-[#5F7455] */
+  padding: 0.75rem; /* p-3 = 12px */
+  border-radius: 9999px; /* rounded-full */
+  transition: all 0.3s ease-out;
+}
+
+.tip-icon-mindful {
+  background-color: rgba(212, 165, 154, 0.2); /* bg-[#D4A59A]/20 */
+  color: #8C5E53; /* text-[#8C5E53] */
+  padding: 0.75rem;
+  border-radius: 9999px;
+  transition: all 0.3s ease-out;
+}
+
+.tip-icon-calm {
+  background-color: rgba(232, 223, 208, 0.4); /* bg-[#E8DFD0]/40 */
+  color: #6B5D52; /* text-[#6B5D52] */
+  padding: 0.75rem;
+  border-radius: 9999px;
+  transition: all 0.3s ease-out;
+}
+
+/* Hover en iconos de tips: group-hover:scale-110 */
+.tip-card:hover .tip-icon-nature,
+.tip-card:hover .tip-icon-mindful,
+.tip-card:hover .tip-icon-calm {
+  transform: scale(1.1); /* hover:scale-110 */
+}
+
+/* ─────────────────────────────────────────────
+   FECHA ICON (Sun)
+   ───────────────────────────────────────────── */
+.date-icon {
+  color: #D4A59A; /* text-[#D4A59A] terracota */
+  width: 1.25rem; /* w-5 = 20px */
+  height: 1.25rem; /* h-5 = 20px */
+}
+
+/* ============================================
+   MODALES Y OVERLAYS
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   FEEDBACK CARD (aparece después de mood selection)
+   ───────────────────────────────────────────── */
+.feedback-card {
+  background-color: #FAF8F3; /* bg-[#FAF8F3] */
+  padding: 1rem; /* p-4 = 16px */
+  border-radius: 1rem; /* rounded-2xl = 16px */
+  margin-top: 0.5rem; /* mt-2 = 8px */
+  animation: fade-in 0.5s ease-out; /* animate-fade-in */
+  color: #6B5D52; /* text-[#6B5D52] */
+  font-weight: 500; /* font-medium */
+}
+
+/* ─────────────────────────────────────────────
+   QUOTE CARD (elemento decorativo con overlay)
+   ───────────────────────────────────────────── */
+.quote-card {
+  background-color: #A8B5A0; /* bg-[#A8B5A0] verde salvia */
+  padding: 2rem; /* p-8 = 32px */
+  border-radius: 1.5rem; /* rounded-3xl = 24px */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); /* shadow-lg */
+  overflow: hidden; /* overflow-hidden para círculos */
+  color: white; /* text-white */
+  position: relative;
+}
+
+/* Círculos decorativos (pseudo-modales) */
+.quote-card-circle-top {
+  position: absolute;
+  width: 8rem; /* w-32 = 128px */
+  height: 8rem; /* h-32 = 128px */
+  background-color: rgba(255, 255, 255, 0.1); /* bg-white/10 */
+  border-radius: 9999px; /* rounded-full */
+  top: -2.5rem; /* -mt-10 = -40px */
+  right: -2.5rem; /* -mr-10 = -40px */
+  transition: transform 0.7s ease-out; /* duration-700 */
+}
+
+.quote-card-circle-bottom {
+  position: absolute;
+  width: 6rem; /* w-24 = 96px */
+  height: 6rem; /* h-24 = 96px */
+  background-color: rgba(255, 255, 255, 0.1); /* bg-white/10 */
+  border-radius: 9999px;
+  bottom: -2.5rem; /* -mb-10 = -40px */
+  left: -2.5rem; /* -ml-10 = -40px */
+  transition: transform 0.7s ease-out;
+}
+
+/* Efectos hover en círculos */
+.quote-card:hover .quote-card-circle-top {
+  transform: scale(1.5); /* hover:scale-150 */
+}
+
+.quote-card:hover .quote-card-circle-bottom {
+  transform: scale(1.25); /* hover:scale-125 */
+}
+
+/* Texto de la cita */
+.quote-text {
+  font-size: 1.125rem; /* text-lg = 18px */
+  font-weight: 500; /* font-medium */
+  opacity: 0.9; /* opacity-90 */
+  position: relative;
+  z-index: 10; /* relative z-10 sobre círculos */
+}
+
+@media (min-width: 768px) {
+  .quote-text {
+    font-size: 1.25rem; /* md:text-xl = 20px */
+  }
+}
+
+/* Autor de la cita */
+.quote-author {
+  font-size: 0.875rem; /* text-sm = 14px */
+  font-weight: 500; /* font-medium */
+  opacity: 0.75; /* opacity-75 */
+  position: relative;
+  z-index: 10; /* relative z-10 */
+  margin-top: 0.5rem;
+}
+
+/* ─────────────────────────────────────────────
+   WELLNESS CARD (componente modal base con vidrio)
+   ───────────────────────────────────────────── */
+.wellness-card {
+  background-color: rgba(255, 255, 255, 0.8); /* bg-white/80 */
+  backdrop-filter: blur(4px); /* backdrop-blur-sm efecto vidrio */
+  -webkit-backdrop-filter: blur(4px); /* Safari */
+  border: 1px solid rgba(232, 223, 208, 0.3); /* border border-[#E8DFD0]/30 */
+  padding: 2rem; /* p-8 = 32px */
+  border-radius: 1.5rem; /* rounded-3xl = 24px */
+  box-shadow: 0 4px 20px -4px rgba(74, 66, 56, 0.05); /* shadow normal */
+  transition: all 0.5s ease-out; /* duration-500 */
+}
+
+.wellness-card:hover {
+  box-shadow: 0 8px 30px -4px rgba(212, 165, 154, 0.15); /* shadow hover terracota */
+  transform: translateY(-2px); /* hover lift sutil */
+}
+
+/* Header de wellness card */
+.wellness-card-header {
+  margin-bottom: 1.5rem; /* mb-6 = 24px */
+  display: flex;
+  justify-content: space-between; /* justify-between */
+  align-items: flex-start; /* items-start */
+}
+
+/* Título de wellness card */
+.wellness-card-title {
+  font-size: 1.25rem; /* text-xl = 20px */
+  font-weight: 700; /* font-bold */
+  color: #4A4238; /* text-[#4A4238] */
+}
+
+/* Subtítulo de wellness card */
+.wellness-card-subtitle {
+  font-size: 0.875rem; /* text-sm = 14px */
+  color: #8C8174; /* text-[#8C8174] */
+  margin-top: 0.25rem; /* mt-1 = 4px */
+}
+
+/* ============================================
+   SISTEMA DE ESPACIADO
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   ESPACIADO ENTRE SECCIONES Y ELEMENTOS
+   ───────────────────────────────────────────── */
+.space-section {
+  margin-bottom: 2rem; /* space-y-8 = 32px entre secciones */
+}
+
+.space-elements {
+  gap: 1rem; /* gap-4 = 16px entre elementos relacionados */
+}
+
+.space-compact {
+  gap: 0.75rem; /* gap-3 = 12px entre elementos compactos */
+}
+
+.space-minimal {
+  gap: 0.5rem; /* gap-2 = 8px entre iconos y texto */
+}
+
+/* ─────────────────────────────────────────────
+   PADDING INTERNO (Tarjetas y elementos)
+   ───────────────────────────────────────────── */
+.padding-card {
+  padding: 2rem; /* p-8 = 32px tarjetas grandes */
+}
+
+.padding-medium {
+  padding: 1rem; /* p-4 = 16px elementos medianos */
+}
+
+.padding-small {
+  padding: 0.75rem; /* p-3 = 12px botones pequeños */
+}
+
+.padding-minimal {
+  padding: 0.5rem; /* p-2 = 8px botones mínimos */
+}
+
+/* ─────────────────────────────────────────────
+   MÁRGENES (Separación entre bloques)
+   ───────────────────────────────────────────── */
+.margin-block {
+  margin-bottom: 1.5rem; /* mb-6 = 24px entre bloques */
+}
+
+.margin-paragraph {
+  margin-top: 1rem; /* mt-4 = 16px entre párrafos */
+}
+
+.margin-title {
+  margin-bottom: 1rem; /* mb-4 = 16px separación de título */
+}
+
+.margin-date {
+  margin-bottom: 0.75rem; /* mb-3 = 12px separación de fecha */
+}
+
+/* ─────────────────────────────────────────────
+   CONTENEDOR Y PADDING LATERAL
+   ───────────────────────────────────────────── */
+.container-main {
+  max-width: 80rem; /* max-w-7xl = 1280px centrado */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem; /* px-6 = 24px móvil */
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-main {
+    padding-left: 3rem; /* md:px-12 = 48px desktop */
+    padding-right: 3rem;
+  }
+}
+
+/* ============================================
+   ESTADOS INTERACTIVOS
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   HOVER STATES (Efectos al pasar el mouse)
+   ───────────────────────────────────────────── */
+.hover-lift {
+  transition: all 0.3s ease-out; /* duration-300 */
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px); /* hover lift sutil */
+  box-shadow: 0 8px 30px -4px rgba(212, 165, 154, 0.15); /* shadow terracota */
+}
+
+.hover-scale {
+  transition: transform 0.3s ease-out; /* duration-300 */
+}
+
+.hover-scale:hover {
+  transform: scale(1.05); /* hover:scale-105 */
+}
+
+.hover-scale-icon {
+  transition: transform 0.3s ease-out;
+}
+
+.hover-scale-icon:hover {
+  transform: scale(1.1); /* hover:scale-110 iconos */
+}
+
+.hover-bg-warm {
+  transition: background-color 0.3s ease-out;
+}
+
+.hover-bg-warm:hover {
+  background-color: #FAF8F3; /* hover:bg-[#FAF8F3] */
+}
+
+.hover-text-dark {
+  transition: color 0.3s ease-out;
+}
+
+.hover-text-dark:hover {
+  color: #4A4238; /* hover:text-[#4A4238] */
+}
+
+/* ─────────────────────────────────────────────
+   FOCUS STATES (Accesibilidad y navegación por teclado)
+   ───────────────────────────────────────────── */
+.focus-outline:focus-visible {
+  outline: 2px solid #D4A59A; /* outline terracota */
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 3px rgba(212, 165, 154, 0.3); /* anillo terracota */
+}
+
+/* ─────────────────────────────────────────────
+   ACTIVE STATES (Estado al hacer clic)
+   ───────────────────────────────────────────── */
+.active-state:active {
+  transform: scale(0.98); /* scale-98 al presionar */
+  transition: transform 0.1s ease-out;
+}
+
+.active-selected {
+  transform: scale(1.05); /* scale-105 seleccionado */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* shadow-md */
+}
+
+/* ─────────────────────────────────────────────
+   DISABLED STATES (Estado deshabilitado)
+   ───────────────────────────────────────────── */
+.disabled-state {
+  opacity: 0.5; /* opacity-50 */
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.disabled-state:hover {
+  transform: none; /* Desactivar efectos hover */
+}
+
+/* ============================================
+   ANIMACIONES PERSONALIZADAS
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   FADE-IN (Aparición suave con traslación)
+   ───────────────────────────────────────────── */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px); /* Aparece desde 10px abajo */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Termina en posición original */
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out; /* animate-fade-in 500ms */
+}
+
+/* ─────────────────────────────────────────────
+   SLIDE-IN-RIGHT (Deslizamiento desde la derecha)
+   ───────────────────────────────────────────── */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px); /* Aparece desde 20px derecha */
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s ease-out; /* 400ms */
+}
+
+/* ─────────────────────────────────────────────
+   PULSE-SOFT (Pulsación suave infinita)
+   ───────────────────────────────────────────── */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8; /* Baja a 80% en el medio */
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; /* 2 segundos infinito */
+}
+
+/* ─────────────────────────────────────────────
+   SLIDE-IN-LEFT (Deslizamiento desde la izquierda)
+   ───────────────────────────────────────────── */
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.4s ease-out;
+}
+
+/* ─────────────────────────────────────────────
+   BOUNCE-SOFT (Rebote suave)
+   ───────────────────────────────────────────── */
+@keyframes bounce-soft {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-bounce-soft {
+  animation: bounce-soft 1s ease-in-out infinite;
+}
+
+/* ============================================
+   TIPS CARDS (Tarjetas de consejos de bienestar)
+   ============================================ */
+
+.tip-card {
+  background-color: rgba(255, 255, 255, 0.9); /* bg-white/90 */
+  padding: 1.5rem; /* p-6 = 24px */
+  border-radius: 1rem; /* rounded-2xl = 16px */
+  border: 1px solid rgba(232, 223, 208, 0.3); /* border-[#E8DFD0]/30 */
+  transition: all 0.3s ease-out; /* duration-300 */
+  display: flex;
+  gap: 1rem; /* gap-4 = 16px entre icono y contenido */
+  align-items: flex-start; /* items-start */
+}
+
+.tip-card:hover {
+  background-color: #FAF8F3; /* hover:bg-[#FAF8F3] */
+  transform: translateY(-2px); /* hover lift */
+  box-shadow: 0 4px 20px -4px rgba(74, 66, 56, 0.1); /* shadow sutil */
+}
+
+.tip-card-content h3 {
+  font-size: 1rem; /* text-base = 16px */
+  font-weight: 600; /* font-semibold */
+  color: #4A4238; /* text-[#4A4238] */
+  margin-bottom: 0.25rem; /* mb-1 = 4px */
+}
+
+.tip-card-content p {
+  font-size: 0.875rem; /* text-sm = 14px */
+  color: #8C8174; /* text-[#8C8174] */
+  line-height: 1.5; /* leading-6 */
+}
+
+/* ============================================
+   BORDES REDONDEADOS (Border Radius System)
+   ============================================ */
+
+.rounded-cards {
+  border-radius: 1.5rem; /* rounded-3xl = 24px tarjetas */
+}
+
+.rounded-buttons {
+  border-radius: 1rem; /* rounded-2xl = 16px botones/elementos pequeños */
+}
+
+.rounded-full {
+  border-radius: 9999px; /* rounded-full círculos completos */
+}
+
+/* ============================================
+   SOMBRAS (Shadow System)
+   ============================================ */
+
+.shadow-card-normal {
+  box-shadow: 0 4px 20px -4px rgba(74, 66, 56, 0.05); /* tarjetas normales */
+}
+
+.shadow-card-hover {
+  box-shadow: 0 8px 30px -4px rgba(212, 165, 154, 0.15); /* tarjetas hover terracota */
+}
+
+.shadow-subtle {
+  box-shadow: 0 2px 10px -2px rgba(74, 66, 56, 0.08); /* sombra muy sutil */
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   TRANSICIONES (Transition System)
+   ============================================ */
+
+.transition-standard {
+  transition: all 0.3s ease-out; /* duration-300 estándar */
+}
+
+.transition-long {
+  transition: all 0.5s ease-out; /* duration-500 animaciones largas */
+}
+
+.transition-extra-long {
+  transition: all 0.7s ease-out; /* duration-700 para círculos decorativos */
+}
+
+.transition-colors {
+  transition: color 0.3s ease-out, background-color 0.3s ease-out;
+}
+
+/* ============================================
+   BACKDROP Y TRANSPARENCIAS
+   ============================================ */
+
+.glass-effect {
+  background-color: rgba(255, 255, 255, 0.8); /* bg-white/80 */
+  backdrop-filter: blur(4px); /* backdrop-blur-sm */
+  -webkit-backdrop-filter: blur(4px); /* Safari */
+}
+
+.decorative-subtle {
+  background-color: rgba(255, 255, 255, 0.1); /* bg-white/10 círculos */
+}
+
+.border-subtle {
+  border: 1px solid rgba(232, 223, 208, 0.3); /* border-[#E8DFD0]/30 */
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES (Adaptación móvil)
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Ajuste de grid para tablets/móviles grandes */
+  .mood-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas en tablet */
+  }
+  
+  .padding-card {
+    padding: 1.5rem; /* Reducir padding en tarjetas */
+  }
+  
+  .wellness-card {
+    padding: 1.5rem;
+  }
+  
+  .quote-card {
+    padding: 1.5rem;
+  }
+  
+  .tip-card {
+    padding: 1.25rem; /* Reducir padding en tips */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Ajustes para móviles pequeños */
+  .mood-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
+    gap: 0.75rem; /* Reducir gap */
+  }
+  
+  .padding-card {
+    padding: 1rem; /* Padding mínimo en móvil */
+  }
+  
+  .wellness-card {
+    padding: 1rem;
+  }
+  
+  .quote-card {
+    padding: 1rem;
+  }
+  
+  .tip-card {
+    padding: 1rem;
+    flex-direction: column; /* Stack vertical en móvil */
+    gap: 0.75rem;
+  }
+  
+  .streak-calendar {
+    gap: 0.125rem; /* Reducir espacio entre días */
+  }
+  
+  .streak-day {
+    width: 1.75rem; /* Reducir tamaño de días */
+    height: 1.75rem;
+    font-size: 0.625rem; /* Texto más pequeño */
+  }
+}
+
+/* ============================================
+   TIPOGRAFÍA Y TAMAÑOS DE TEXTO
+   ============================================ */
+
+/* Títulos grandes (Hero) */
+.text-hero {
+  font-size: 2.5rem; /* text-4xl = 40px móvil */
+  font-weight: 700; /* font-bold */
+  line-height: 1.1;
+}
+
+@media (min-width: 768px) {
+  .text-hero {
+    font-size: 3rem; /* md:text-5xl = 48px desktop */
+  }
+}
+
+/* Títulos de sección */
+.text-section-title {
+  font-size: 1.25rem; /* text-xl = 20px */
+  font-weight: 700; /* font-bold */
+  color: #4A4238; /* text-[#4A4238] */
+}
+
+/* Subtítulos */
+.text-subtitle {
+  font-size: 1.25rem; /* text-xl = 20px */
+  font-weight: 400; /* regular */
+  color: #8C8174; /* text-[#8C8174] */
+}
+
+/* Texto normal */
+.text-body {
+  font-size: 1rem; /* text-base = 16px */
+  line-height: 1.5;
+  color: #4A4238;
+}
+
+.text-body-sm {
+  font-size: 0.875rem; /* text-sm = 14px */
+  line-height: 1.5;
+}
+
+/* Texto pequeño */
+.text-caption {
+  font-size: 0.75rem; /* text-xs = 12px */
+  color: #8C8174;
+}
+
+/* Colores de texto específicos */
+.text-primary {
+  color: #4A4238; /* Marrón oscuro principal */
+}
+
+.text-secondary {
+  color: #8C8174; /* Marrón claro secundario */
+}
+
+.text-accent-terra {
+  color: #D4A59A; /* Terracota */
+}
+
+.text-accent-sage {
+  color: #A8B5A0; /* Verde salvia */
+}
+
+/* ============================================
+   UTILIDADES ADICIONALES
+   ============================================ */
+
+/* Layout flexbox común */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-start {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* Ocultar en móvil/desktop */
+.hidden-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hidden-mobile {
+    display: block;
+  }
+}
+
+.hidden-desktop {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .hidden-desktop {
+    display: none;
+  }
+}
+
+/* Truncar texto */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Limitar líneas de texto */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================
+   ACCESIBILIDAD (ARIA y estados)
+   ============================================ */
+
+/* Ocultar visualmente pero mantener para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Estados ARIA */
+[aria-pressed="true"] {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Focus visible para navegación por teclado */
+*:focus-visible {
+  outline: 2px solid #D4A59A;
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* ============================================
+   FIN DE UTILITIES.CSS
+   Sistema de diseño cálido y cohesivo
+   ============================================ */

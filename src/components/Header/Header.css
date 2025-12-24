@@ -1,11 +1,15 @@
+/* ============================================
+   HEADER/SIDEBAR (Sistema de navegación)
+   ============================================ */
 .header {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
+/* Botón hamburguesa con efectos del sistema */
 .header-top {
-  padding: 1rem;
+  padding: 1rem; /* p-4 */
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -16,29 +20,30 @@
   border: none;
   color: white;
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  transition: all 0.3s ease;
+  padding: 0.5rem; /* p-2 = 8px */
+  border-radius: 1rem; /* rounded-2xl = 16px */
+  transition: all 0.3s ease-out; /* transition-standard */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .hamburger-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: scale(1.05);
+  background: rgba(232, 223, 208, 0.2); /* hover:bg-[#E8DFD0]/20 */
+  transform: scale(1.05); /* hover:scale-105 */
 }
 
 .hamburger-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.95); /* active-state */
 }
 
+/* Contenido del header con transición suave */
 .header-content {
-  padding: 0 1.5rem 1.5rem;
+  padding: 0 1.5rem 1.5rem; /* px-6 pb-6 */
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  transition: opacity 0.3s ease;
+  gap: 2rem; /* gap-8 = 32px */
+  transition: opacity 0.3s ease-out; /* transition-standard */
 }
 
 .header-content.oculto {
@@ -50,60 +55,55 @@
   opacity: 1;
 }
 
-.logo-section {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  transition: all 0.3s ease;
-}
-
 .logo-icon {
-  width: 1.75rem;
-  height: 1.75rem;
-  color: white;
+  width: 1.75rem; /* w-7 = 28px */
+  height: 1.75rem; /* h-7 = 28px */
+  color: white; /* text-white */
   flex-shrink: 0;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-out;
 }
 
 .logo-text {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.5rem; /* text-2xl = 24px */
+  font-weight: 700; /* font-bold */
   color: white;
   white-space: nowrap;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-out;
 }
 
+/* Menú de navegación con efectos hover */
 .nav-menu {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.5rem; /* gap-2 = 8px */
 }
 
+/* Items de navegación con clase nav-button del sistema */
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 0.75rem;
+  gap: 0.75rem; /* gap-3 */
+  padding: 0.75rem; /* p-3 = 12px */
+  border-radius: 1rem; /* rounded-2xl = 16px */
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-out; /* transition-standard */
   color: white;
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateX(4px);
+  background: rgba(232, 223, 208, 0.3); /* hover:bg-[#E8DFD0]/30 */
+  transform: translateX(4px); /* hover slide derecha */
 }
 
 .nav-item:active {
-  transform: translateX(2px);
+  transform: translateX(2px); /* active-state */
 }
 
 .nav-icon {
   width: 1.25rem;
   height: 1.25rem;
   flex-shrink: 0;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-out;
 }
 
 .nav-item:hover .nav-icon {
@@ -112,7 +112,7 @@
 
 .nav-text {
   font-size: 1.125rem;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
 }
 

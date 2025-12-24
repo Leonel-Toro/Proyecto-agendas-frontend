@@ -18,8 +18,7 @@ export default function Header({ cambiarVista, sidebarAbierto, toggleSidebar }) 
 
         <div className={`header-content ${sidebarAbierto ? 'visible' : 'oculto'}`}>
           <div className="logo-section">
-            <Sparkles className="logo-icon" />
-            {sidebarAbierto && <h1 className="logo-text">Mi Agenda</h1>}
+            {sidebarAbierto && <h1 className="logo-text"></h1>}
           </div>
           
           {sidebarAbierto && (

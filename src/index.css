@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import "./utilities.css";
 
 * {
   box-sizing: border-box;
@@ -7,13 +9,39 @@
 }
 
 :root {
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Quicksand', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light;
-  color: #1f2937;
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #4A4238; /* texto principal */
+  background: var(--color-bg-warm);
+
+  /* ============================================
+     PALETA DE COLORES PRINCIPALES
+     ============================================ */
+  --color-bg-warm: #FAF8F3; /* fondo cálido beige muy claro */
+  --color-bg-card: #FFFFFF; /* blanco (usaremos opacidad 80% en componentes) */
+  --color-text-brown: #4A4238; /* texto principal marrón oscuro */
+  --color-text-light: #8C8174; /* texto secundario marrón claro */
+  
+  /* Colores de acento */
+  --color-accent-terra: #D4A59A; /* terracota rosa suave */
+  --color-accent-sage: #A8B5A0; /* verde salvia/oliva suave */
+  --color-accent-beige: #E8DFD0; /* beige medio/crema */
+  --color-accent-yellow: #FDE68A; /* amarillo mantequilla cálido */
+  --color-neutral-gray: #9CA3AF; /* gris neutro medio */
+  
+  /* Colores complementarios para texto y detalles */
+  --color-green-dark: #5F7455; /* verde oscuro para texto */
+  --color-brown-red: #8C5E53; /* marrón rojizo para texto */
+  --color-brown-medium: #6B5D52; /* marrón medio para texto */
+  --color-green-very-dark: #3F4F3A; /* verde muy oscuro */
+  --color-brown-chocolate: #5C3D36; /* marrón chocolate */
+  --color-gray-dark: #374151; /* gris oscuro */
+  
+  /* Alias para compatibilidad */
+  --color-primary: #4A4238;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -23,22 +51,50 @@
 
 a {
   font-weight: 500;
-  color: #1d4ed8;
+  color: var(--color-text-brown);
   text-decoration: inherit;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease-out;
 }
 
 a:hover {
-  color: #0891b2;
+  color: var(--color-accent-terra);
 }
 
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 50%, #e5e7eb 100%);
+  background: var(--color-bg-warm);
   background-attachment: fixed;
   overflow-x: hidden;
+}
+
+/* ============================================
+   SCROLLBAR PERSONALIZADO
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E8DFD0;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D4A59A;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #E8DFD0 transparent;
 }
 
 h1 {
@@ -47,14 +103,14 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
+  border-radius: 1rem;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
+  font-family: 'Quicksand', inherit;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-out;
 }
 
 /* Estilos globales de DatePicker responsivos */
@@ -67,16 +123,16 @@ button {
 }
 
 .react-datepicker {
-  font-family: inherit !important;
-  border-radius: 0.75rem !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  font-family: 'Quicksand', inherit !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 10px 40px rgba(74, 66, 56, 0.15) !important;
   border: none !important;
 }
 
 .react-datepicker__header {
-  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%) !important;
+  background: var(--color-text-brown) !important;
   border-bottom: none !important;
-  border-radius: 0.75rem 0.75rem 0 0 !important;
+  border-radius: 1rem 1rem 0 0 !important;
   padding: 1rem !important;
 }
 
@@ -89,18 +145,18 @@ button {
 
 .react-datepicker__day--selected,
 .react-datepicker__time-list-item--selected {
-  background-color: #1d4ed8 !important;
+  background-color: var(--color-accent-terra) !important;
   color: white !important;
   font-weight: 600 !important;
 }
 
 .react-datepicker__day:hover {
-  background-color: #dbeafe !important;
+  background-color: var(--color-accent-beige) !important;
   border-radius: 0.5rem !important;
 }
 
 .react-datepicker__day--keyboard-selected {
-  background-color: #bfdbfe !important;
+  background-color: var(--color-accent-yellow) !important;
   border-radius: 0.5rem !important;
 }
 
@@ -188,16 +244,26 @@ button {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%);
+  background: var(--color-accent-beige);
   border-radius: 10px;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-out;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #1e40af 0%, #0e7490 100%);
+  background: var(--color-accent-terra);
+}
+
+/* Animación fade-in personalizada */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
 }

@@ -206,6 +206,17 @@ export default function Historial() {
   return (
     <section className="historial">
       <div className="container-historial">
+        {/* Header con título y acciones */}
+        <div className="mini-header">
+          <div className="sessions-header">
+            <div className="sessions-title-section">
+              <h2>Registro de Reservas</h2>
+              <p>Historial completo de reservas y citas</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs de filtro */}
         <div className="card-historial-header flex gap-3 mb-6">
           {TABS.map(({ id, label, icono: Icono }) => (
             <button
@@ -213,8 +224,8 @@ export default function Historial() {
               onClick={() => manejarCambioTab(id)}
               className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
                 tab === id
-                  ? "bg-gradient-to-r from-blue-700 to-cyan-600 text-white shadow-lg"
-                  : "bg-white text-blue-700 hover:bg-blue-50 border-2 border-blue-700"
+                  ? "bg-[#A8B5A0] text-white shadow-lg"
+                  : "bg-white text-[#4a4238] hover:bg-zinc-50 border-2 border-[#E8DFD0]"
               }`}
             >
               <Icono className="w-5 h-5" />
@@ -223,8 +234,9 @@ export default function Historial() {
           ))}
         </div>
 
+        {/* Tabla de contenido */}
         <div className="card-historial">
-          {loading && <p>Cargando historial…</p>}
+          {loading && <p className="text-center py-8 text-[#8C8174]">Cargando historial…</p>}
           {!loading && (
             <>
               <DetallesHistorial
@@ -240,7 +252,7 @@ export default function Historial() {
                   <button
                     onClick={() => cambiarPagina(paginaActual - 1)}
                     disabled={paginaActual === 1}
-                    className="flex items-center gap-1 px-3 py-2 rounded-lg border-2 border-blue-700 text-blue-700 font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:enabled:bg-blue-50"
+                      className="flex items-center gap-1 px-3 py-2 rounded-lg border-2 border-[#4a4238] text-[#4a4238] font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:enabled:bg-zinc-50"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Anterior
@@ -265,7 +277,7 @@ export default function Historial() {
                   <button
                     onClick={() => cambiarPagina(paginaActual + 1)}
                     disabled={paginaActual === totalPaginas}
-                    className="flex items-center gap-1 px-3 py-2 rounded-lg border-2 border-blue-700 text-blue-700 font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:enabled:bg-blue-50"
+                      className="flex items-center gap-1 px-3 py-2 rounded-lg border-2 border-[#4a4238] text-[#4a4238] font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:enabled:bg-zinc-50"
                   >
                     Siguiente
                     <ChevronRight className="w-4 h-4" />

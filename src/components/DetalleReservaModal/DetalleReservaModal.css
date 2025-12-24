@@ -1,9 +1,13 @@
-/* Overlay y contenedor del modal */
+/* ============================================
+   MODAL DE SESIÓN (Estilo imágenes de referencia)
+   ============================================ */
+/* Overlay con backdrop blur */
 .modal-overlay {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,13 +18,274 @@
 
 .modal-content {
   background: white;
-  border-radius: 1rem;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
-  max-width: 42rem;
+  border-radius: 1.5rem; /* rounded-3xl */
+  box-shadow: 0 25px 80px rgba(74, 66, 56, 0.15);
+  max-width: 42rem; /* max-w-3xl */
   width: 100%;
   max-height: 90vh;
+  overflow: hidden;
+  animation: slideUp 0.4s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header decorativo con círculos verde salvia */
+.modal-header-decorative {
+  background: linear-gradient(135deg, #A8B5A0 0%, #8FA28A 100%);
+  padding: 2rem 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.modal-header-decorative::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  top: -100px;
+  right: -50px;
+  transition: transform 0.7s ease-out;
+}
+
+.modal-header-decorative::after {
+  content: '';
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  bottom: -75px;
+  left: -30px;
+  transition: transform 0.7s ease-out;
+}
+
+.modal-header-decorative:hover::before {
+  transform: scale(1.3);
+}
+
+.modal-header-decorative:hover::after {
+  transform: scale(1.2);
+}
+
+.modal-header-content {
+  position: relative;
+  z-index: 10;
+}
+
+.modal-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: white;
+}
+
+.modal-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.95;
+  color: white;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s ease-out;
+  z-index: 20;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Cuerpo del modal con scroll */
+.modal-body {
+  padding: 2rem;
   overflow-y: auto;
-  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: calc(90vh - 200px);
+}
+
+/* Avatar con iniciales */
+.patient-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(232, 223, 208, 0.3);
+}
+
+.patient-details h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-brown);
+  margin-bottom: 0.25rem;
+}
+
+.patient-details p {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+}
+
+/* Grid de inputs (Fecha y Hora lado a lado) */
+.input-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .input-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Label con icono */
+.input-label-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-brown);
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.input-label-with-icon svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-accent-sage);
+}
+
+/* Input y textarea personalizados */
+.input-field-custom {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid rgba(232, 223, 208, 0.6);
+  border-radius: 1rem;
+  background: white;
+  color: var(--color-text-brown);
+  font-size: 0.9375rem;
+  font-family: 'Quicksand', sans-serif;
+  transition: all 0.3s ease-out;
+  outline: none;
+}
+
+.input-field-custom::placeholder {
+  color: rgba(74, 66, 56, 0.4);
+}
+
+.input-field-custom:focus {
+  border-color: var(--color-accent-terra);
+  background: rgba(212, 165, 154, 0.03);
+  box-shadow: 0 0 0 3px rgba(212, 165, 154, 0.1);
+}
+
+.input-field-custom:hover:not(:focus) {
+  border-color: var(--color-accent-beige);
+}
+
+/* Botones tipo toggle (Tipo de Sesión) */
+.session-type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.session-type-btn {
+  padding: 0.875rem 1rem;
+  border-radius: 1rem;
+  border: 2px solid rgba(232, 223, 208, 0.6);
+  background: white;
+  color: var(--color-text-brown);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+  text-align: center;
+}
+
+.session-type-btn:hover {
+  border-color: var(--color-accent-beige);
+  background: rgba(232, 223, 208, 0.1);
+}
+
+.session-type-btn.active {
+  border-color: var(--color-accent-sage);
+  background: rgba(168, 181, 160, 0.15);
+  color: var(--color-green-dark);
+}
+
+/* Footer con botones */
+.modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid rgba(232, 223, 208, 0.3);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  background: rgba(250, 248, 243, 0.5);
+}
+
+.btn-cancelar {
+  padding: 0.75rem 1.75rem;
+  border-radius: 1rem;
+  border: 2px solid rgba(156, 163, 175, 0.3);
+  background: white;
+  color: #6B7280;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+
+.btn-cancelar:hover {
+  border-color: rgba(156, 163, 175, 0.5);
+  background: rgba(156, 163, 175, 0.05);
+  transform: translateY(-1px);
+}
+
+.btn-guardar {
+  padding: 0.75rem 1.75rem;
+  border-radius: 1rem;
+  border: none;
+  background: linear-gradient(135deg, #A8B5A0 0%, #8FA28A 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+  box-shadow: 0 4px 12px rgba(168, 181, 160, 0.3);
+}
+
+.btn-guardar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(168, 181, 160, 0.4);
+}
+
+.btn-guardar:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .modal-footer {
+    flex-direction: column;
+  }
+  
+  .btn-cancelar,
+  .btn-guardar {
+    width: 100%;
+  }
 }
 
 /* Responsividad para tablets */
@@ -32,7 +297,7 @@
   .modal-content {
     max-width: 100%;
     max-height: 95vh;
-    border-radius: 0.75rem;
+    border-radius: 1rem;
   }
 }
 
@@ -43,18 +308,21 @@
   }
   
   .modal-content {
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     max-height: 98vh;
   }
 }
 
+/* ============================================
+   ANIMACIONES PERSONALIZADAS
+   ============================================ */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(18px); opacity: 0; }
+  from { transform: translateY(10px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
@@ -65,7 +333,7 @@
 }
 
 .modal-content .react-datepicker__header {
-  background: linear-gradient(to right, #1d4ed8, #0891b2) !important;
+  background: var(--color-text-brown) !important;
   color: white !important;
   border-bottom: none;
 }
@@ -77,17 +345,17 @@
 
 .modal-content .react-datepicker__day--selected,
 .modal-content .react-datepicker__time-list-item--selected {
-  background-color: #1d4ed8 !important;
+  background-color: var(--color-accent-terra) !important;
   color: white !important;
 }
 
 .modal-content .react-datepicker__day--keyboard-selected {
   background-color: white;
-  border: 2px solid #bfdbfe;
+  border: 2px solid var(--color-accent-beige);
 }
 
 .modal-content .react-datepicker__day--keyboard-selected:not([aria-disabled="true"]):hover {
-  background-color: #dbeafe;
+  background-color: var(--color-accent-yellow);
 }
 
 .modal-content .react-datepicker-time__header {
@@ -116,13 +384,13 @@
 
 /* Estilo para la fecha de reserva resaltada en amarillo */
 .modal-content .fecha-reserva-highlight {
-  background-color: #fbbf24 !important;
-  color: #78350f !important;
+  background-color: var(--color-accent-yellow) !important;
+  color: var(--color-brown-chocolate) !important;
   font-weight: 600;
   border-radius: 50%;
 }
 
 .modal-content .fecha-reserva-highlight:hover {
-  background-color: #f59e0b !important;
-  color: #78350f !important;
+  background-color: var(--color-accent-terra) !important;
+  color: white !important;
 }

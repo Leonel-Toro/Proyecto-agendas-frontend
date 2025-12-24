@@ -6,6 +6,7 @@ import "../../App.css"
 import { CalendarContainer } from "react-datepicker"
 import CalendarioHora from "./CalendarioHora/CalendarioHora"
 import { useEffect, useState } from "react"
+import { AlignEndVertical } from "lucide-react"
 
 export default function Formulario() {
     const urlBase = import.meta.env.VITE_URL_BACKEND;
@@ -228,8 +229,8 @@ export default function Formulario() {
                     <form >
                         <div className="card-details">
                             <div className="mb-6">
-                                <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-1 inline-flex items-center gap-2 shadow-md border border-blue-100">
-                                    <span className="w-1.5 h-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-full"></span>
+                                <div className=" titulo-formulario bg-white/80 p-1 inline-flex items-center gap-2 shadow-md ">
+                                    <span className="w-1.5 h-8 bg-[#4a4238] rounded-full"></span>
                                     <span className="text-base font-bold text-gray-800 pr-3">Datos del cliente</span>
                                 </div>                            
                             </div>
@@ -246,8 +247,8 @@ export default function Formulario() {
                                 </div>
                             </div>
                             <div className="mt-[2.5rem] mb-6">
-                                <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-1 inline-flex items-center gap-2 shadow-md border border-blue-100">
-                                    <span className="w-1.5 h-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-full"></span>
+                                <div className="titulo-formulario bg-white/80 p-1 inline-flex items-center gap-2 shadow-md ">
+                                    <span className="w-1.5 h-8 bg-[#4a4238] rounded-full"></span>
                                     <span className="text-base font-bold text-gray-800 pr-3">Datos del pedido</span>
                                 </div>                             
                             </div>
@@ -262,8 +263,8 @@ export default function Formulario() {
                                 </div>
                             </div>   
                             <div className="mt-[2.5rem] mb-6">
-                                <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-1 inline-flex items-center gap-2 shadow-md border border-blue-100">
-                                    <span className="w-1.5 h-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-full"></span>
+                                <div className="titulo-formulario bg-white/80 p-1 inline-flex items-center gap-2 shadow-md ">
+                                    <span className="w-1.5 h-8 bg-[#4a4238] rounded-full"></span>
                                     <span className="text-base font-bold text-gray-800 pr-3">Detalles de la reserva</span>
                                 </div>  
                             </div>
@@ -273,7 +274,7 @@ export default function Formulario() {
                                     {errors.fechaReserva && <p className="text-red-500 text-xs mt-1 ml-1">{errors.fechaReserva}</p>}
                                 </div>
                             </div>                              
-                            <div className="grid grid-cols-3 gap-3">
+                            <div className="grid grid-cols-3 gap-3" style={{ alignItems: 'end' }}>
                                 <div>
                                     <InputsForm titulo="Lugar de entrega" type="text" input="input" placeholder="Ej: Metro El bosque" name="lugarEncuentro"  changePayload={handlePayload} value={payload.lugarEncuentro} />
                                     {errors.lugarEncuentro && <p className="text-red-500 text-xs mt-1 ml-1">{errors.lugarEncuentro}</p>}
@@ -293,7 +294,7 @@ export default function Formulario() {
                         </div>
                         <div className="card-actions">
                             <button 
-                                className="px-8 py-3 bg-gradient-to-r from-blue-700 to-cyan-700 text-white rounded-full font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100" 
+                                className="px-8 py-3 bg-[#4a4238] text-white rounded-full font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100" 
                                 onClick={enviarFormulario}
                                 disabled={Object.values(errors).some(error => error !== "")}
                             >

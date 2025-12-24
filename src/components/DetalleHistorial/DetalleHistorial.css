@@ -1,17 +1,226 @@
+/* ============================================
+   TABLA DE SESIONES (Estilo imágenes de referencia)
+   ============================================ */
 .mini-header {
-    padding: 1rem 1.5rem;
-    font-size: 1.25rem;
+    padding: 0;
+    margin-bottom: 1.5rem;
+}
+
+.sessions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sessions-title-section h2 {
+    font-size: 1.75rem;
     font-weight: 700;
-    transition: all 0.3s ease;
+    color: var(--color-text-brown);
+    margin-bottom: 0.25rem;
 }
 
-.mini-header-title {
-    color: #1f2937;
-    transition: color 0.3s ease;
+.sessions-title-section p {
+    font-size: 0.9375rem;
+    color: var(--color-text-light);
 }
 
-.mini-header-title:hover {
-    color: #1d4ed8;
+.icon-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(232, 223, 208, 0.5);
+    background: white;
+    color: var(--color-text-brown);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+}
+
+.icon-btn:hover {
+    background: rgba(232, 223, 208, 0.2);
+    border-color: var(--color-accent-beige);
+    transform: translateY(-1px);
+}
+
+/* Barra de búsqueda */
+.search-bar-container {
+    margin-bottom: 1.5rem;
+}
+
+.search-bar {
+    position: relative;
+}
+
+.search-bar svg {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-text-light);
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 0.875rem 1rem 0.875rem 3rem;
+    border-radius: 1rem;
+    border: 2px solid rgba(232, 223, 208, 0.5);
+    background: white;
+    font-size: 0.9375rem;
+    transition: all 0.3s ease-out;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--color-accent-sage);
+    box-shadow: 0 0 0 3px rgba(168, 181, 160, 0.15);
+}
+
+/* Tabla moderna con avatares */
+.sessions-table-wrapper {
+    overflow-x: auto;
+    border-radius: 1rem;
+    border: 1px solid rgba(232, 223, 208, 0.3);
+    background: white;
+    box-shadow: 0 4px 20px -4px rgba(74,66,56,0.05);
+}
+
+.sessions-table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.sessions-table thead th {
+    background: rgba(250, 248, 243, 0.8);
+    color: var(--color-text-brown);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 2px solid rgba(232, 223, 208, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.sessions-table thead th:first-child {
+    border-top-left-radius: 1rem;
+}
+
+.sessions-table thead th:last-child {
+    border-top-right-radius: 1rem;
+}
+
+.sessions-table tbody tr {
+    transition: all 0.3s ease-out;
+  animation: fadeInRow 0.4s ease-out;
+}
+
+.sessions-table tbody tr:hover {
+    background: rgba(168, 181, 160, 0.05);
+}
+
+.sessions-table tbody td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(232, 223, 208, 0.2);
+    color: var(--color-text-brown);
+    font-size: 0.9375rem;
+}
+
+@keyframes fadeInRow {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Avatar circular en tabla */
+.patient-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.patient-name {
+    font-weight: 600;
+    color: var(--color-text-brown);
+}
+
+/* Badges de estado */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge-individual {
+    background: rgba(168, 181, 160, 0.15);
+    color: var(--color-green-dark);
+}
+
+.badge-pareja {
+    background: rgba(212, 165, 154, 0.15);
+    color: var(--color-brown-red);
+}
+
+.badge-familiar {
+    background: rgba(232, 223, 208, 0.3);
+    color: var(--color-brown-medium);
+}
+
+.badge-grupal {
+    background: rgba(253, 230, 138, 0.3);
+    color: #92400E;
+}
+
+.badge-completada {
+    background: rgba(168, 181, 160, 0.2);
+    color: var(--color-green-dark);
+    padding: .5rem;
+}
+
+.badge-programada {
+    background: rgba(253, 230, 138, 0.3);
+    color: #92400E;
+    padding: .5rem;
+}
+
+.badge-cancelada {
+    background: rgba(156, 163, 175, 0.2);
+    color: var(--color-gray-dark);
+    padding: .5rem;
+}
+
+.badge-pagado {
+    background: rgba(168, 181, 160, 0.2);
+    color: var(--color-green-dark);
+    padding: .5rem;
+}
+
+.badge-pendiente {
+    background: rgba(253, 230, 138, 0.3);
+    color: #92400E;
+    padding: .5rem;
+}
+
+.badge-reembolsado {
+    background: rgba(156, 163, 175, 0.2);
+    color: var(--color-gray-dark);
+    padding: .5rem;
 }
 
 /* Responsividad para tablets */

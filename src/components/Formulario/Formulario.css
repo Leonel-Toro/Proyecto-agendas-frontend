@@ -1,9 +1,12 @@
+/* ============================================
+   FORMULARIO (Sistema de wellness-card)
+   ============================================ */
 .formulario {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1200px; /* max-w-7xl */
     margin: 0 auto;
-    padding: 0 1rem;
-    animation: slideInUp 0.5s ease-out;
+    padding: 0 1rem; /* px-4 */
+    animation: slideInUp 0.5s ease-out; /* animate-fade-in */
 }
 
 .container-formulario {
@@ -11,32 +14,53 @@
     width: 100%;
 }
 
+/* Tarjeta con efecto vidrio (glass-effect + wellness-card) */
 .card {
-    background-color: white;
-    border-radius: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    background-color: rgba(255,255,255,0.8); /* bg-white/80 */
+    backdrop-filter: blur(4px); /* backdrop-blur-sm */
+    -webkit-backdrop-filter: blur(4px); /* Safari */
+    border-radius: 1.5rem; /* rounded-3xl = 24px */
+    border: 1px solid rgba(232, 223, 208, 0.3); /* border-[#E8DFD0]/30 */
+    box-shadow: 0 4px 20px -4px rgba(74,66,56,0.05); /* shadow-card-normal */
     width: 100%;
     margin: 0 auto;
-    transition: all 0.3s ease;
+    transition: all 0.5s ease-out; /* duration-500 */
     overflow: hidden;
 }
 
 .card:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 30px -4px rgba(212,165,154,0.15); /* shadow-card-hover terracota */
+    transform: translateY(-2px); /* hover-lift */
 }
 
+/* Acciones de la tarjeta */
 .card-actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
+    justify-content: flex-end; /* justify-end */
+    align-items: center; /* items-center */
+    gap: 1rem; /* gap-4 = 16px */
     flex-wrap: wrap;
 }
 
+/* Padding de secciones */
 .card-details,
 .card-actions {
-    padding: 2rem;
+    padding: 2rem; /* padding-card = 32px */
+    border: 1px solid rgba(232,223,208,0.3); /* border-subtle */
 }
 
+.titulo-formulario{
+    width: 200px;
+    border-radius: 10px;
+}
+
+.titulo-formulario span.rounded-full {
+    margin: 10px 0px 10px 10px
+}
+
+/* ============================================
+   ANIMACIONES (fade-in del sistema)
+   ============================================ */
 @keyframes slide-in {
     from {
         transform: translateX(100%);
@@ -50,7 +74,7 @@
 
 @keyframes slideInUp {
     from {
-        transform: translateY(30px);
+        transform: translateY(10px); /* Aparece desde 10px abajo */
         opacity: 0;
     }
     to {
@@ -60,14 +84,18 @@
 }
 
 .animate-slide-in {
-    animation: slide-in 0.3s ease-out;
+    animation: slide-in 0.3s ease-out; /* animate-slide-in-right */
 }
 
-/* Responsividad para tablets (1024px y menos) */
+/* ============================================
+   RESPONSIVE (Tablets y móviles)
+   ============================================ */
+
+/* Tablets (1024px y menos) */
 @media (max-width: 1024px) {
     .formulario {
         max-width: 100%;
-        padding: 0 0.75rem;
+        padding: 0 0.75rem; /* px-3 */
     }
     
     .card {
@@ -76,23 +104,23 @@
     
     .card-details,
     .card-actions {
-        padding: 1.5rem;
+        padding: 1.5rem; /* padding-medium reducido */
     }
 }
 
-/* Responsividad para móviles grandes (768px y menos) */
+/* Móviles grandes (768px y menos) */
 @media (max-width: 768px) {
     .formulario {
-        padding: 0 0.5rem;
+        padding: 0 0.5rem; /* px-2 */
     }
     
     .card {
-        border-radius: 0.75rem;
+        border-radius: 1rem; /* rounded-2xl = 16px */
     }
     
     .card-details,
     .card-actions {
-        padding: 1.25rem;
+        padding: 1.25rem; /* padding móvil */
     }
     
     .card-actions {
@@ -107,7 +135,7 @@
     }
     
     .card {
-        border-radius: 0.5rem;
+        border-radius: 1rem;
     }
     
     .card-details,

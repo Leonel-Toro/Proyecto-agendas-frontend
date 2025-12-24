@@ -127,7 +127,6 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
   if (!reserva) return null;
 
   const estados = ['PENDIENTE', 'ABONADA', 'PAGADA', 'NO_CONCRETADA'];
-
   return (
     <div className="modal-overlay">
       {/* Modal de error flotante */}
@@ -147,53 +146,58 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
           </div>
         </div>
       )}
-      <div className="modal-content rounded-lg">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-700 to-cyan-600 text-white px-6 py-4 flex justify-between items-center">
-          <h2 className="text-xl font-bold">
-            {modo === 'ver' ? 'Detalle de Reserva' : 'Editar Reserva'}
-          </h2>
-          <button
-            onClick={onClose}
-            className="hover:bg-white hover:bg-opacity-20 p-1 rounded-lg transition-colors"
-          >
+      
+      <div className="modal-content">
+        {/* Header decorativo con círculos */}
+        <div className="modal-header-decorative">
+          <button onClick={onClose} className="modal-close-btn">
             <X className="w-6 h-6" />
           </button>
+          <div className="modal-header-content">
+            <h2 className="modal-title">
+              {modo === 'ver' ? 'Detalle de Reserva' : 'Editar Reserva'}
+            </h2>
+            <p className="modal-subtitle">
+              {modo === 'ver' ? 'Información completa de la reserva' : 'Actualiza los detalles de la reserva'}
+            </p>
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="max-h-[650px] p-6 space-y-6 overflow-y-auto">
-          {/* Información de solo lectura */}
-          <div className="grid grid-cols-2 gap-6 pb-6 border-b border-gray-200">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Cliente
-              </label>
-              <p className="text-gray-900">{reserva.nombreCliente || 'N/A'}</p>
+        {/* Body con scroll */}
+        <div className="modal-body">
+          {/* Avatar e info del paciente */}
+          <div className="patient-info">
+            <div className="patient-details">
+              <h3>{reserva.nombreCliente || 'N/A'}</h3>
+              <p>Reserva #{reserva.id || 'N/A'}</p>
             </div>
+          </div>
+
+          {/* Información de solo lectura */}
+          <div className="grid grid-cols-2 gap-4 mb-6">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Email
               </label>
-              <p className="text-gray-900 break-all">{reserva.emailCliente || 'N/A'}</p>
+              <p className="text-gray-900 break-all text-sm">{reserva.emailCliente || 'N/A'}</p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Teléfono
               </label>
-              <p className="text-gray-900">{reserva.telefonoCliente || 'N/A'}</p>
+              <p className="text-gray-900 text-sm">{reserva.telefonoCliente || 'N/A'}</p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Medio
               </label>
-              <p className="text-gray-900">{reserva.medioCliente || 'N/A'}</p>
+              <p className="text-gray-900 text-sm">{reserva.medioCliente || 'N/A'}</p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Fecha de Reserva
               </label>
-              <p className="text-gray-900">{formatoFecha(reserva.fechaReserva)}</p>
+              <p className="text-gray-900 text-sm">{formatoFecha(reserva.fechaReserva)}</p>
             </div>
           </div>
 
@@ -201,7 +205,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
           <div className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="input-label-with-icon">
                   Nombre del Producto
                 </label>
                 {modo === 'ver' ? (
@@ -214,7 +218,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                       value={formData.nombreProducto}
                       onChange={handleInputChange}
                       placeholder="Ingrese nombre del producto"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="input-field-custom"
                     />
                     {touched.nombreProducto && errors.nombreProducto && (
                       <p className="text-red-500 text-xs mt-1 ml-1">{errors.nombreProducto}</p>
@@ -225,10 +229,10 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
               <div>
                 {modo === 'ver' ? (
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="input-label-with-icon">
                       Estado
                     </label>
-                    <div className={`inline-block px-3 py-1 rounded-lg font-semibold ${getEstadoClase(formData.estado)}`}>
+                    <div className={`inline-block px-3 py-1 rounded-lg font-semibold ${getBadgeEstadoClass(formData.estado)}`}>
                       {formatearEstado(formData.estado)}
                     </div>
                   </div>
@@ -249,14 +253,14 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
               </div>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="input-label-with-icon">
                 Fecha de Entrega
               </label>
               {modo === 'ver' ? (
                 <p className="text-gray-900">{formData.fechaTermino ? formatoFecha(formData.fechaTermino) : 'Sin especificar'}</p>
               ) : (
                 <div className="space-y-3">
-                  <div className="px-4 py-2 border-2 border-gray-300 rounded-lg bg-white min-h-[48px] flex items-center">
+                  <div className="input-field-custom min-h-[48px] flex items-center">
                     {formData.fechaTermino ? format(formData.fechaTermino, "dd/MM/yyyy HH:mm", { locale: es }) : 'Seleccione fecha'}
                   </div>
                   <div className="w-full">
@@ -283,7 +287,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
               )}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="input-label-with-icon">
                 Lugar de Entrega
               </label>
               {modo === 'ver' ? (
@@ -295,12 +299,12 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                   value={formData.lugarEncuentro}
                   onChange={handleInputChange}
                   placeholder="Ingrese lugar de entrega"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input-field-custom"
                 />
               )}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="input-label-with-icon">
                 Monto Abonado
               </label>
               {modo === 'ver' ? (
@@ -315,7 +319,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                     placeholder="Ingrese monto abonado"
                     min={1}
                     step={1}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field-custom"
                   />
                   {touched.abonado && errors.abonado && (
                     <p className="text-red-500 text-xs mt-1 ml-1">{errors.abonado}</p>
@@ -324,7 +328,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
               )}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="input-label-with-icon">
                 Precio Total
               </label>
               {modo === 'ver' ? (
@@ -339,7 +343,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                     placeholder="Ingrese precio"
                     min={1}
                     step={1}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input-field-custom"
                   />
                   {touched.precio && errors.precio && (
                     <p className="text-red-500 text-xs mt-1 ml-1">{errors.precio}</p>
@@ -348,7 +352,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
               )}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="input-label-with-icon">
                 Mensaje Personalizado
               </label>
               {modo === 'ver' ? (
@@ -360,7 +364,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                   onChange={handleInputChange}
                   placeholder="Ingrese mensaje personalizado"
                   rows="4"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="input-field-custom resize-none"
                 />
               )}
             </div>
@@ -368,10 +372,10 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+        <div className="modal-footer">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors"
+            className="btn-cancelar"
           >
             {modo === 'ver' ? 'Cerrar' : 'Cancelar'}
           </button>
@@ -379,7 +383,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
             <button
               onClick={handleGuardar}
               disabled={Object.values(errors).some(e => e !== '')}
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-700 to-cyan-600 text-white font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-guardar"
             >
               Guardar Cambios
             </button>
@@ -486,4 +490,18 @@ function getEstadoClase(estado) {
     'COMPLETADO': 'text-blue-600 bg-blue-50'
   };
   return clasesMap[estadoStr] || '';
+}
+
+function getBadgeEstadoClass(estado) {
+  // Convertir ID numérico a string si es necesario
+  const estadoStr = typeof estado === 'number' ? estadoIdAString(estado) : estado;
+  const clasesMap = {
+    'PENDIENTE': 'badge-pendiente',
+    'ABONADA': 'badge-completada',
+    'PAGADA': 'badge-completada',
+    'CANCELADA': 'badge-cancelada',
+    'NO_CONCRETADA': 'badge-cancelada',
+    'COMPLETADO': 'badge-completada'
+  };
+  return clasesMap[estadoStr] || 'badge-pendiente';
 }

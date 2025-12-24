@@ -1,25 +1,30 @@
+/* ============================================
+   MODAL DE ÉXITO (Wellness modal system)
+   ============================================ */
 .modal-exito-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.5); /* Overlay oscuro 50% */
+  backdrop-filter: blur(8px); /* backdrop-blur-md */
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* items-center */
+  justify-content: center; /* justify-center */
   z-index: 1100;
-  padding: 1rem;
-  animation: fadeIn 0.3s ease-out;
+  padding: 1rem; /* p-4 */
+  animation: fadeIn 0.3s ease-out; /* animate-fade-in */
 }
 
 .modal-exito-content {
-  background: white;
-  border-radius: 1.5rem;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
-  max-width: 28rem;
+  background: white; /* bg-white */
+  border-radius: 1.5rem; /* rounded-3xl = 24px */
+  border: 1px solid rgba(232, 223, 208, 0.3); /* border-[#E8DFD0]/30 */
+  box-shadow: 0 25px 80px rgba(74, 66, 56, 0.2), 0 0 0 1px rgba(232, 223, 208, 0.1); /* shadow-lg mejorado */
+  max-width: 28rem; /* max-w-md = 448px */
   width: 100%;
-  padding: 3rem 2rem;
-  text-align: center;
-  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 3rem 2rem; /* p-12 py-8 */
+  text-align: center; /* text-center */
+  animation: slideUp 0.4s ease-out; /* animate-slide-in animación personalizada */
 }
 
 /* Responsividad para tablets */
@@ -31,7 +36,7 @@
   .modal-exito-content {
     max-width: 90%;
     padding: 2.5rem 1.5rem;
-    border-radius: 1.25rem;
+    border-radius: 1rem;
   }
   
   .modal-exito-titulo {
@@ -70,49 +75,63 @@
   }
 }
 
+/* Icono de éxito con animación */
 .modal-exito-icon {
   display: flex;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  animation: scaleIn 0.4s ease-out 0.1s both;
+  justify-content: center; /* justify-center */
+  margin-bottom: 1.5rem; /* mb-6 = 24px */
+  animation: scaleIn 0.5s ease-out 0.1s both; /* animate-scale-in con delay */
 }
 
+.modal-exito-icon svg {
+  width: 4rem; /* w-16 = 64px */
+  height: 4rem; /* h-16 = 64px */
+  color: var(--color-accent-sage); /* #A8B5A0 verde salvia para éxito */
+}
+
+/* Título del modal */
 .modal-exito-titulo {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 1rem;
+  font-size: 1.875rem; /* text-3xl = 30px */
+  font-weight: 700; /* font-bold */
+  color: var(--color-text-brown); /* #4A4238 marrón principal */
+  margin-bottom: 1rem; /* mb-4 = 16px */
 }
 
+/* Mensaje del modal */
 .modal-exito-mensaje {
-  font-size: 1.125rem;
-  color: #4b5563;
-  margin-bottom: 2rem;
-  line-height: 1.6;
+  font-size: 1.125rem; /* text-lg = 18px */
+  color: var(--color-text-light); /* #8C8174 marrón claro */
+  margin-bottom: 2rem; /* mb-8 = 32px */
+  line-height: 1.6; /* leading-relaxed */
 }
 
+/* Botón de cerrar con estilo CTA */
 .modal-exito-boton {
-  background: linear-gradient(to right, #1d4ed8, #0891b2);
+  background: var(--color-text-brown); /* #4A4238 marrón principal */
   color: white;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 0.875rem 2.5rem;
-  border-radius: 0.75rem;
+  font-weight: 600; /* font-semibold */
+  font-size: 1rem; /* text-base = 16px */
+  padding: 0.875rem 2.5rem; /* py-3.5 px-10 */
+  border-radius: 1rem; /* rounded-2xl = 16px */
   border: none;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+  transition: all 0.3s ease-out; /* transition-standard */
+  box-shadow: 0 4px 20px -4px rgba(74,66,56,0.3); /* shadow-card-normal */
 }
 
 .modal-exito-boton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(29, 78, 216, 0.4);
+  transform: translateY(-2px); /* hover-lift */
+  box-shadow: 0 8px 30px -4px rgba(212,165,154,0.4); /* shadow-card-hover terracota */
+  background: var(--color-brown-medium); /* #6B5D52 hover más claro */
 }
 
 .modal-exito-boton:active {
-  transform: translateY(0);
+  transform: translateY(0); /* active-state */
 }
 
+/* ============================================
+   ANIMACIONES PERSONALIZADAS DEL MODAL
+   ============================================ */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -120,7 +139,7 @@
 
 @keyframes slideUp {
   from { 
-    transform: translateY(20px);
+    transform: translateY(10px); /* Aparece desde 10px abajo */
     opacity: 0;
   }
   to { 
@@ -131,11 +150,15 @@
 
 @keyframes scaleIn {
   from {
-    transform: scale(0);
+    transform: scale(0); /* Comienza desde tamaño 0 */
     opacity: 0;
   }
   to {
-    transform: scale(1);
+    transform: scale(1); /* Escala completa */
     opacity: 1;
   }
 }
+
+/* ============================================
+   FIN DE MODAL-EXITO.CSS
+   ============================================ */

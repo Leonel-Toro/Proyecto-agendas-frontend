@@ -3,14 +3,14 @@ import { Eye, Edit } from 'lucide-react';
 export default function AccionesReserva({ item, tab, onVer, onEditar }) {
   const acciones = {
     Historial: [
-      { label: "Ver", icono: Eye, accion: () => onVer?.(item), color: "text-blue-600" }
+      { label: "Ver", icono: Eye, accion: () => onVer?.(item), color: "text-[#A8B5A0]" }
     ],
     Pendientes: [
-      { label: "Ver", icono: Eye, accion: () => onVer?.(item), color: "text-blue-600" },
+      { label: "Ver", icono: Eye, accion: () => onVer?.(item), color: "text-[#A8B5A0]" },
       { label: "Editar", icono: Edit, accion: () => onEditar?.(item), color: "text-orange-600" }
     ],
     Completados: [
-      { label: "Ver", icono: Eye, accion: () => onVer?.(item), color: "text-blue-600" }
+      { label: "Ver", icono: Eye, accion: () => onVer?.(item), color: "text-[#A8B5A0]" }
     ]
   };
 

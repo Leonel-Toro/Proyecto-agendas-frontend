@@ -1,23 +1,25 @@
-/* Estilos para botones del header */
+/* ============================================
+   BOTONES DEL HEADER (Sistema de navegación)
+   ============================================ */
 .boton-header {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
-    font-size: 0.9375rem;
+    padding: 0.75rem 1.5rem; /* py-3 px-6 */
+    border-radius: 1rem; /* rounded-2xl = 16px */
+    font-weight: 600; /* font-semibold */
+    font-size: 0.9375rem; /* text-base */
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-out; /* transition-standard */
     border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px -4px rgba(74,66,56,0.05); /* shadow-card-normal */
 }
 
 .boton-header:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px); /* hover-lift */
+    box-shadow: 0 8px 30px -4px rgba(212,165,154,0.15); /* shadow-card-hover terracota */
 }
 
 .boton-header:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(0); /* active-state */
+    box-shadow: 0 2px 8px rgba(74,66,56,0.12);
 }
 
 /* Responsividad para tablets */

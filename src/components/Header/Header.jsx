@@ -1,31 +1,48 @@
 import "./Header.css"
-import { Calendar, Clock, Sparkles } from 'lucide-react'
+import { Calendar, Clock, Sparkles, Menu } from 'lucide-react'
 
-export default function Header({cambiarVista}) {
+export default function Header({ cambiarVista, sidebarAbierto, toggleSidebar }) {
     return (
       <section className="header">
-        <div className="p-6">
-          <div className="flex items-center gap-2 mb-8">
-            <Sparkles className="w-7 h-7 text-white" />
-            <h1 className="text-2xl font-bold text-white">Mi Agenda</h1>
+        {/* Botón hamburguesa para contraer/expandir */}
+        <div className="header-top">
+          <button 
+            className="hamburger-btn"
+            onClick={toggleSidebar}
+            aria-label={sidebarAbierto ? "Contraer menú" : "Expandir menú"}
+            title={sidebarAbierto ? "Contraer menú" : "Expandir menú"}
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
+
+        <div className={`header-content ${sidebarAbierto ? 'visible' : 'oculto'}`}>
+          <div className="logo-section">
+            <Sparkles className="logo-icon" />
+            {sidebarAbierto && <h1 className="logo-text">Mi Agenda</h1>}
           </div>
-          <nav className="space-y-2">
-            <div 
-              className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/20 cursor-pointer transition-all duration-200 group"
-              onClick={()=>cambiarVista("agendar")}
-            >
-              <Calendar className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
-              <span className="text-white text-lg font-medium">Agendar</span>
-            </div>
-            <div 
-              className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/20 cursor-pointer transition-all duration-200 group"
-              onClick={()=>cambiarVista("historial")}
-            >
-              <Clock className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
-              <span className="text-white text-lg font-medium">Historial</span>
-            </div>
-          </nav>
+          
+          {sidebarAbierto && (
+            <nav className="nav-menu">
+              <div 
+                className="nav-item"
+                onClick={() => cambiarVista("agendar")}
+                title="Agendar"
+              >
+                <Calendar className="nav-icon" />
+                <span className="nav-text">Agendar</span>
+              </div>
+              <div 
+                className="nav-item"
+                onClick={() => cambiarVista("historial")}
+                title="Historial"
+              >
+                <Clock className="nav-icon" />
+                <span className="nav-text">Historial</span>
+              </div>
+            </nav>
+          )}
         </div>
       </section>
     )
-  }
+}

@@ -1,4 +1,11 @@
 @import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 :root {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -18,7 +25,9 @@ a {
   font-weight: 500;
   color: #1d4ed8;
   text-decoration: inherit;
+  transition: color 0.3s ease;
 }
+
 a:hover {
   color: #0891b2;
 }
@@ -29,6 +38,7 @@ body {
   min-height: 100vh;
   background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 50%, #e5e7eb 100%);
   background-attachment: fixed;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -44,5 +54,150 @@ button {
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.3s ease;
+}
+
+/* Estilos globales de DatePicker responsivos */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container {
+  width: 100%;
+}
+
+.react-datepicker {
+  font-family: inherit !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  border: none !important;
+}
+
+.react-datepicker__header {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%) !important;
+  border-bottom: none !important;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+  padding: 1rem !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name,
+.react-datepicker-time__header {
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__time-list-item--selected {
+  background-color: #1d4ed8 !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: #dbeafe !important;
+  border-radius: 0.5rem !important;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #bfdbfe !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Responsividad general */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.4em;
+  }
+  
+  .react-datepicker {
+    font-size: 0.875rem !important;
+  }
+  
+  .react-datepicker__header {
+    padding: 0.75rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2em;
+  }
+  
+  button {
+    padding: 0.5em 1em;
+    font-size: 0.9em;
+  }
+  
+  .react-datepicker {
+    font-size: 0.8125rem !important;
+  }
+  
+  .react-datepicker__header {
+    padding: 0.5rem !important;
+  }
+}
+
+/* Animaciones globales suaves */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #1e40af 0%, #0e7490 100%);
 }

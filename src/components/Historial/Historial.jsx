@@ -138,7 +138,7 @@ export default function Historial() {
         id: reservaActualizada?.id,
         precio: Number(reservaActualizada?.precio ?? 0),
         abonado: Number(reservaActualizada?.abonado ?? 0),
-        abonado: Number(reservaActualizada?.abonado ?? 0), // enviar nuevo atributo requerido
+        abono: Number(reservaActualizada?.abonado ?? 0),
         estado: reservaActualizada?.estado ?? "",
         nombreProducto: reservaActualizada?.nombreProducto ?? "",
         fechaReserva: reservaActualizada?.fechaReserva ?? "",

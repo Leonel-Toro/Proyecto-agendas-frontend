@@ -2,25 +2,50 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(2px);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 1rem;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .modal-content {
   background: white;
   border-radius: 1rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
   max-width: 42rem;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  animation: slideUp 0.25s ease-out;
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsividad para tablets */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 0.75rem;
+  }
+  
+  .modal-content {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 0.75rem;
+  }
+}
+
+/* Responsividad para móviles */
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+  
+  .modal-content {
+    border-radius: 0.5rem;
+    max-height: 98vh;
+  }
 }
 
 @keyframes fadeIn {

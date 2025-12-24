@@ -1,1 +1,39 @@
+/* Estilos para botones del header */
+.boton-header {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.boton-header:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.boton-header:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsividad para tablets */
+@media (max-width: 768px) {
+    .boton-header {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Responsividad para móviles */
+@media (max-width: 480px) {
+    .boton-header {
+        padding: 0.5rem 1rem;
+        font-size: 0.8125rem;
+        border-radius: 0.5rem;
+    }
+}
 

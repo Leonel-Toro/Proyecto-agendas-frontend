@@ -1,46 +1,87 @@
-.inputLabel{
+.inputLabel {
     color: #374151;
     font-weight: 600;
     font-size: 0.875rem;
+    transition: color 0.2s ease;
 }
 
-.inputForm{
+.inputForm {
     border-radius: 0.75rem;
     border: 2px solid #e5e7eb;
     padding: 0.75rem 1rem;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background-color: white;
     font-size: 0.95rem;
+    width: 100%;
 }
 
-.inputForm:hover{
+.inputForm:hover {
     border-color: #bfdbfe;
+    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.08);
 }
 
-.inputForm:focus-visible{
+.inputForm:focus-visible {
     border-color: #1d4ed8;
     outline: none;
     box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+    transform: translateY(-1px);
 }
 
-.selectForm{
+.selectForm {
     border: 2px solid #e5e7eb;
     outline: none;
     height: 48px;
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
     background-color: white;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-size: 0.95rem;
+    width: 100%;
 }
 
-.selectForm:hover{
+.selectForm:hover {
     border-color: #bfdbfe;
+    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.08);
 }
 
-.selectForm:focus{
+.selectForm:focus {
     border-color: #1d4ed8;
     box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+    transform: translateY(-1px);
+}
+
+/* Responsividad para móviles */
+@media (max-width: 768px) {
+    .inputLabel {
+        font-size: 0.8125rem;
+    }
+    
+    .inputForm,
+    .selectForm {
+        font-size: 0.875rem;
+        padding: 0.625rem 0.875rem;
+    }
+    
+    .selectForm {
+        height: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    .inputLabel {
+        font-size: 0.75rem;
+    }
+    
+    .inputForm,
+    .selectForm {
+        font-size: 0.8125rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+    }
+    
+    .selectForm {
+        height: 40px;
+    }
 }
 
 .calendario {

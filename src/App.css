@@ -17,7 +17,7 @@
    HEADER/SIDEBAR CONTAINER
    ============================================ */
 .header-container {
-  height: 100vh;
+  height: -webkit-fill-available;
   background: var(--color-text-brown); /* #4A4238 marrón principal */
   position: fixed;
   left: 0;

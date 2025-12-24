@@ -147,8 +147,30 @@
         flex-direction: column;
         gap: 0.75rem;
     }
+}
+
+/* Móviles extra pequeños (425px y menos) - Inputs en columna */
+@media (max-width: 425px) {
+    .formulario {
+        padding: 0 0.5rem;
+    }
     
+    .card-details,
+    .card-actions {
+        padding: 1rem;
+    }
+    
+    /* Convertir todos los grids a 1 columna */
+    .grid.grid-cols-2,
+    .grid.grid-cols-3 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Asegurar que el calendario ocupe todo el ancho */
+    .grid.grid-cols-1 {
+        grid-template-columns: 1fr !important;
+    }
+}
     .card-actions button {
         width: 100%;
     }
-}

@@ -326,62 +326,6 @@
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Estilos para el DatePicker en el modal */
-.modal-content .react-datepicker {
-  width: 100% !important;
-  font-family: inherit;
-}
-
-.modal-content .react-datepicker__header {
-  background: var(--color-text-brown) !important;
-  color: white !important;
-  border-bottom: none;
-}
-
-.modal-content .react-datepicker__current-month,
-.modal-content .react-datepicker__day-name {
-  color: white !important;
-}
-
-.modal-content .react-datepicker__day--selected,
-.modal-content .react-datepicker__time-list-item--selected {
-  background-color: var(--color-accent-terra) !important;
-  color: white !important;
-}
-
-.modal-content .react-datepicker__day--keyboard-selected {
-  background-color: white;
-  border: 2px solid var(--color-accent-beige);
-}
-
-.modal-content .react-datepicker__day--keyboard-selected:not([aria-disabled="true"]):hover {
-  background-color: var(--color-accent-yellow);
-}
-
-.modal-content .react-datepicker-time__header {
-  color: white !important;
-}
-
-.modal-content .react-datepicker__month-container {
-  width: 70%;
-}
-
-.modal-content .react-datepicker__time-container {
-  width: 30%;
-}
-
-.modal-content .react-datepicker__navigation--previous {
-  left: 10px;
-}
-
-.modal-content .react-datepicker__navigation--next {
-  right: calc(30% + 10px);
-}
-
-.modal-content .react-datepicker__time-box {
-  width: 100% !important;
-}
-
 /* Estilo para la fecha de reserva resaltada en amarillo */
 .modal-content .fecha-reserva-highlight {
   background-color: var(--color-accent-yellow) !important;
@@ -393,4 +337,31 @@
 .modal-content .fecha-reserva-highlight:hover {
   background-color: var(--color-accent-terra) !important;
   color: white !important;
+}
+/* Estilos específicos para el calendario dentro del modal */
+.calendario-modal {
+  width: 100%;
+  overflow: hidden;
+}
+
+.calendario-modal > div {
+  width: 100%;
+}
+
+/* Ajustes responsive para el calendario en el modal */
+@media (max-width: 768px) {
+  .modal-body {
+    padding: 1.5rem;
+  }
+  
+  .calendario-modal {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-body {
+    padding: 1rem;
+  }
 }

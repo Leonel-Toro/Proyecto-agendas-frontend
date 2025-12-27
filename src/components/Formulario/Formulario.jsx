@@ -1,19 +1,14 @@
-import DetalleHistorial from "../DetalleHistorial/DetalleHistorial"
 import InputsForm from "../InputsForm/InputsForm"
 import ModalExito from "../ModalExito/ModalExito"
 import "./Formulario.css"
 import "../../App.css"
-import { CalendarContainer } from "react-datepicker"
 import CalendarioHora from "./CalendarioHora/CalendarioHora"
-import { useEffect, useState } from "react"
-import { AlignEndVertical } from "lucide-react"
+import { useState } from "react"
 
 export default function Formulario() {
     const urlBase = import.meta.env.VITE_URL_BACKEND;
     const [payload, setPayload] = useState({
         nombreCliente: "",
-        emailCliente: "",
-        telefonoCliente: "",
         medioCliente: "",
         nombreProducto: "",
         estado: "",
@@ -36,8 +31,18 @@ export default function Formulario() {
         precio: "",
         abonado: ""
     });
+    const [touched, setTouched] = useState({
+        nombreCliente: false,
+        medioCliente: false,
+        nombreProducto: false,
+        estado: false,
+        fechaReserva: false,
+        lugarEncuentro: false,
+        precio: false,
+        abonado: false
+    });
 
-    function validateField(name, value) {
+    function validateFieldWithPayload(name, value, currentPayload = payload) {
         let error = "";
         
         switch(name) {
@@ -72,9 +77,9 @@ export default function Formulario() {
                 const abonadoNum = Number(value);
                 if (value === "" || value === "0") {
                     error = "El precio es obligatorio";
-                } else if (abonadoNum <= 0) {
-                    error = "El precio debe ser mayor a 0";
-                } else if (abonadoNum > Number(payload.precio)) {
+                } else if (abonadoNum < 0) {
+                    error = "El precio debe ser mayor o igual a 0";
+                } else if (abonadoNum > Number(currentPayload.precio)) {
                     error = "El abonado no puede ser mayor al precio total";
                 }
                 break;
@@ -95,12 +100,16 @@ export default function Formulario() {
         
         return error;
     }
+
+    function validateField(name, value) {
+        return validateFieldWithPayload(name, value, payload);
+    }
     
     function handlePayload(inputEvent){
         const name = inputEvent.target !== undefined ? inputEvent.target.name : inputEvent.name;
         let value = inputEvent.target !== undefined ? inputEvent.target.value : inputEvent.value;
         
-        if (name === "precio" || name === "telefonoCliente" || name === "abonado") {
+        if (name === "precio" || name === "abonado") {
             const soloNum = value.replace(/\D/g, "");
             if (soloNum !== value) {
                 return;
@@ -108,17 +117,36 @@ export default function Formulario() {
             value = soloNum;
         }
 
-        setPayload(prev => ({
-            ...prev,
+        const nuevoPayload = {
+            ...payload,
             [name]: value
+        };
+
+        setPayload(nuevoPayload);
+        
+        // Marcar el campo como tocado
+        setTouched(prev => ({
+            ...prev,
+            [name]: true
         }));
         
-        // Validar el campo después de actualizar el valor
-        validateField(name, value);
+        // Validar solo los campos que han sido tocados
+        Object.keys(errors).forEach(fieldName => {
+            if (touched[fieldName] || fieldName === name) {
+                validateFieldWithPayload(fieldName, nuevoPayload[fieldName], nuevoPayload);
+            }
+        });
     }
 
     async function enviarFormulario(e){        
         e.preventDefault();
+        
+        // Marcar todos los campos como tocados
+        const allTouched = Object.keys(touched).reduce((acc, key) => {
+            acc[key] = true;
+            return acc;
+        }, {});
+        setTouched(allTouched);
         
         // Validar todos los campos antes de enviar
         const camposValidar = [
@@ -145,15 +173,13 @@ export default function Formulario() {
         const payloadNormalizado = {
             precio: Number(payload.precio),
             abonado: Number(payload.abonado),
-            abono: Number(payload.abonado), // nuevo campo requerido por backend
+            abono: Number(payload.abonado),
             estado: payload.estado,
             nombreProducto: payload.nombreProducto,
             fechaReserva: payload.fechaReserva,
             fechaTermino: null,
             lugarEncuentro: payload.lugarEncuentro,
             nombreCliente: payload.nombreCliente,
-            emailCliente: payload.emailCliente,
-            telefonoCliente: payload.telefonoCliente,
             medioCliente: payload.medioCliente,
             mensajePersonalizado: payload.mensajePersonalizado
         }
@@ -235,15 +261,13 @@ export default function Formulario() {
                                 </div>                            
                             </div>
                             <div className="grid grid-cols-2 sm:grid-cols-1 my-[1rem] gap-3">
-                                <div>
+                                <div className="min-h-[95px]">
                                     <InputsForm titulo="Nombre" type="text" placeholder="Ej: Juan Perez" input="input" name="nombreCliente"  changePayload={handlePayload} value={payload.nombreCliente}/>
-                                    {errors.nombreCliente && <p className="text-red-500 text-xs mt-1 ml-1">{errors.nombreCliente}</p>}
+                                    {touched.nombreCliente && errors.nombreCliente && <p className="text-red-500 text-xs mt-1 ml-1">{errors.nombreCliente}</p>}
                                 </div>
-                                <InputsForm titulo="Email" type="email" placeholder="Ej: ejemplo@gmail.com" input="input" name="emailCliente"  changePayload={handlePayload} value={payload.emailCliente}/>
-                                <InputsForm titulo="Teléfono" type="text" placeholder="+569 1234 5678" input="input" name="telefonoCliente"  changePayload={handlePayload} value={payload.telefonoCliente}/>
-                                <div>
+                                <div className="min-h-[95px]">
                                     <InputsForm titulo="Medio de contacto" input="select" name="medioCliente"  changePayload={handlePayload} value={payload.medioCliente}/>
-                                    {errors.medioCliente && <p className="text-red-500 text-xs mt-1 ml-1">{errors.medioCliente}</p>}
+                                    {touched.medioCliente && errors.medioCliente && <p className="text-red-500 text-xs mt-1 ml-1">{errors.medioCliente}</p>}
                                 </div>
                             </div>
                             <div className="mt-[2.5rem] mb-6">
@@ -253,13 +277,13 @@ export default function Formulario() {
                                 </div>                             
                             </div>
                             <div className="grid grid-cols-2 my-[1rem] gap-3">
-                                <div>
+                                <div className="min-h-[95px]">
                                     <InputsForm titulo="Nombre del producto" input="input" type="text" name="nombreProducto" placeholder="Snoopy..."  changePayload={handlePayload} value={payload.nombreProducto}/>
-                                    {errors.nombreProducto && <p className="text-red-500 text-xs mt-1 ml-1">{errors.nombreProducto}</p>}
+                                    {touched.nombreProducto && errors.nombreProducto && <p className="text-red-500 text-xs mt-1 ml-1">{errors.nombreProducto}</p>}
                                 </div>
-                                <div>
+                                <div className="min-h-[95px]">
                                     <InputsForm titulo="Estado" input="select"  changePayload={handlePayload} value={payload.estado} name="estado"/>
-                                    {errors.estado && <p className="text-red-500 text-xs mt-1 ml-1">{errors.estado}</p>}
+                                    {touched.estado && errors.estado && <p className="text-red-500 text-xs mt-1 ml-1">{errors.estado}</p>}
                                 </div>
                             </div>   
                             <div className="mt-[2.5rem] mb-6">
@@ -271,21 +295,21 @@ export default function Formulario() {
                             <div className="grid grid-cols-1 my-[1rem] gap-3">
                                 <div>
                                     <CalendarioHora name="fechaReserva"  changePayload={handlePayload} value={payload.fechaReserva}/>
-                                    {errors.fechaReserva && <p className="text-red-500 text-xs mt-1 ml-1">{errors.fechaReserva}</p>}
+                                    {touched.fechaReserva && errors.fechaReserva && <p className="text-red-500 text-xs mt-1 ml-1">{errors.fechaReserva}</p>}
                                 </div>
                             </div>                              
                             <div className="grid grid-cols-3 gap-3" style={{ alignItems: 'end' }}>
-                                <div>
+                                <div className="min-h-[95px]">
                                     <InputsForm titulo="Lugar de entrega" type="text" input="input" placeholder="Ej: Metro El bosque" name="lugarEncuentro"  changePayload={handlePayload} value={payload.lugarEncuentro} />
-                                    {errors.lugarEncuentro && <p className="text-red-500 text-xs mt-1 ml-1">{errors.lugarEncuentro}</p>}
+                                    {touched.lugarEncuentro && errors.lugarEncuentro && <p className="text-red-500 text-xs mt-1 ml-1">{errors.lugarEncuentro}</p>}
                                 </div>
-                                <div>
+                                <div className="min-h-[95px]">
                                     <InputsForm titulo="Abonado" type="text" placeholder="Ej:$10000" input="input"  changePayload={handlePayload} value={payload.abonado} name="abonado"/>
-                                    {errors.abonado && <p className="text-red-500 text-xs mt-1 ml-1">{errors.abonado}</p>}
+                                    {touched.abonado && errors.abonado && <p className="text-red-500 text-xs mt-1 ml-1">{errors.abonado}</p>}
                                 </div>
-                                <div>
+                                <div className="min-h-[95px]">
                                     <InputsForm titulo="Precio total" type="text" placeholder="Ej:$10000" input="input"  changePayload={handlePayload} value={payload.precio} name="precio"/>
-                                    {errors.precio && <p className="text-red-500 text-xs mt-1 ml-1">{errors.precio}</p>}
+                                    {touched.precio && errors.precio && <p className="text-red-500 text-xs mt-1 ml-1">{errors.precio}</p>}
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 my-[1rem] gap-3">

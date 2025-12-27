@@ -3,14 +3,13 @@ import styles from "../../InputsForm/InputsForm.module.css"
 import { format } from "date-fns"
 import { es } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
-import { useState } from "react";
 
-export default function CalendarioHora({name, changePayload, value}) {
-  const fechaFormateada = value ? format(value, "dd/MM/yyyy HH:mm", { locale: es }) : "";
+export default function CalendarioHora({name, changePayload, value, highlightDates = [new Date()]}) {
+  const fechaFormateada = value ? format(value, "dd/MM/yyyy HH:mm", { locale: es }) : "Seleccione fecha y hora";
 
   return (
     <div className="grid gap-3">
-        <label className={`w-[80%] ${styles.inputForm}`}>
+        <label className={`${styles.inputForm}`}>
               {fechaFormateada}
         </label>
       <div className={styles.calendario}>
@@ -24,6 +23,7 @@ export default function CalendarioHora({name, changePayload, value}) {
           locale={es}
           inline
           timeCaption="Hora"
+          highlightDates={highlightDates}
         />
       </div>
     </div>

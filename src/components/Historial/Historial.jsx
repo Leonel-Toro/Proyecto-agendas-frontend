@@ -47,15 +47,42 @@ export default function Historial() {
           const registros = data?.entidad && Array.isArray(data.entidad) ? data.entidad : [];
           const map = new Map();
           registros.forEach((r) => {
-            const email = String(r.emailCliente || '').trim().toLowerCase();
             const fecha = String(r.fechaReserva || '').trim();
-            const key = `${email}|${fecha}`;
+            const key = `${r.nombreCliente}|${fecha}`;
             if (!map.has(key)) {
               const estado = String(r.estado || '').trim().toUpperCase();
               map.set(key, { ...r, estado });
             }
           });
-          setItems(Array.from(map.values()));
+          
+          // Ordenar por fecha de término más próxima o fecha de reserva más nueva
+          const itemsOrdenados = Array.from(map.values()).sort((a, b) => {
+            const fechaTerminoA = a.fechaTermino ? new Date(a.fechaTermino).getTime() : null;
+            const fechaTerminoB = b.fechaTermino ? new Date(b.fechaTermino).getTime() : null;
+            const fechaReservaA = new Date(a.fechaReserva).getTime();
+            const fechaReservaB = new Date(b.fechaReserva).getTime();
+            const ahora = Date.now();
+            
+            // Si ambos tienen fecha de término
+            if (fechaTerminoA && fechaTerminoB) {
+              return fechaTerminoA - fechaTerminoB; // Ascendente: más próxima primero
+            }
+            
+            // Si solo A tiene fecha de término
+            if (fechaTerminoA && !fechaTerminoB) {
+              return -1; // A primero
+            }
+            
+            // Si solo B tiene fecha de término
+            if (!fechaTerminoA && fechaTerminoB) {
+              return 1; // B primero
+            }
+            
+            // Si ninguno tiene fecha de término, ordenar por fecha de reserva (más nueva primero)
+            return fechaReservaB - fechaReservaA; // Descendente: más nueva primero
+          });
+          
+          setItems(itemsOrdenados);
           setPaginaActual(1);
         }
         setLoading(false);
@@ -145,8 +172,6 @@ export default function Historial() {
         fechaTermino: reservaActualizada?.fechaTermino ?? reservaActualizada?.fechaReserva ?? "",
         lugarEncuentro: reservaActualizada?.lugarEncuentro ?? "",
         nombreCliente: reservaActualizada?.nombreCliente ?? "",
-        emailCliente: reservaActualizada?.emailCliente ?? "",
-        telefonoCliente: reservaActualizada?.telefonoCliente ?? "",
         medioCliente: reservaActualizada?.medioCliente ?? "",
         mensajePersonalizado: reservaActualizada?.mensajePersonalizado ?? "",
       };
@@ -211,7 +236,7 @@ export default function Historial() {
           <div className="sessions-header">
             <div className="sessions-title-section">
               <h2>Registro de Reservas</h2>
-              <p>Historial completo de reservas y citas</p>
+              <p>Historial completo de reservas</p>
             </div>
           </div>
         </div>

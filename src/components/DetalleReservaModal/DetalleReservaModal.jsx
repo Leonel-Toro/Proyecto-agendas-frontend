@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import DatePicker from "react-datepicker";
+import CalendarioHora from '../Formulario/CalendarioHora/CalendarioHora.jsx';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,7 +19,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
   });
   const [errors, setErrors] = useState({
     nombreProducto: '',
-    estado: '',
+    estado: '', 
     precio: '',
     abonado: '',
     fechaTermino: ''
@@ -177,18 +177,6 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Email
-              </label>
-              <p className="text-gray-900 break-all text-sm">{reserva.emailCliente || 'N/A'}</p>
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Teléfono
-              </label>
-              <p className="text-gray-900 text-sm">{reserva.telefonoCliente || 'N/A'}</p>
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Medio
               </label>
               <p className="text-gray-900 text-sm">{reserva.medioCliente || 'N/A'}</p>
@@ -202,9 +190,9 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
           </div>
 
           {/* Campos editables */}
-          <div className="space-y-5">
+          <div className="space-y-5" style={{marginTop: '1rem'}}>
             <div className="grid grid-cols-2 gap-4">
-              <div>
+              <div style={{marginTop: '1rem'}}>
                 <label className="input-label-with-icon">
                   Nombre del Producto
                 </label>
@@ -226,7 +214,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                   </>
                 )}
               </div>
-              <div>
+              <div style={{marginTop: '1rem'}}>
                 {modo === 'ver' ? (
                   <div>
                     <label className="input-label-with-icon">
@@ -252,41 +240,27 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                 )}
               </div>
             </div>
-            <div>
+            <div style={{marginTop: '1rem'}}>
               <label className="input-label-with-icon">
                 Fecha de Entrega
               </label>
               {modo === 'ver' ? (
                 <p className="text-gray-900">{formData.fechaTermino ? formatoFecha(formData.fechaTermino) : 'Sin especificar'}</p>
               ) : (
-                <div className="space-y-3">
-                  <div className="input-field-custom min-h-[48px] flex items-center">
-                    {formData.fechaTermino ? format(formData.fechaTermino, "dd/MM/yyyy HH:mm", { locale: es }) : 'Seleccione fecha'}
-                  </div>
-                  <div className="w-full">
-                    <DatePicker
-                      selected={formData.fechaTermino}
-                      onChange={handleDateChange}
-                      showTimeSelect
-                      timeIntervals={15}
-                      timeFormat="HH:mm"
-                      dateFormat="dd/MM/yyyy HH:mm"
-                      locale={es}
-                      inline
-                      timeCaption="Hora"
-                      className="w-full"
-                      highlightDates={[{
-                        "fecha-reserva-highlight": [new Date(reserva.fechaReserva)]
-                      }]}
-                    />
-                  </div>
+                <div className="calendario-modal">
+                  <CalendarioHora 
+                    name="fechaTermino" 
+                    value={formData.fechaTermino} 
+                    changePayload={({ name, value }) => handleDateChange(value)}
+                    highlightDates={[new Date(reserva.fechaReserva)]} 
+                  />
                   {touched.fechaTermino && errors.fechaTermino && (
                     <p className="text-red-500 text-xs mt-1 ml-1">{errors.fechaTermino}</p>
                   )}
                 </div>
               )}
             </div>
-            <div>
+            <div style={{marginTop: '1rem'}}>
               <label className="input-label-with-icon">
                 Lugar de Entrega
               </label>
@@ -303,7 +277,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                 />
               )}
             </div>
-            <div>
+            <div style={{marginTop: '1rem'}}>
               <label className="input-label-with-icon">
                 Monto Abonado
               </label>
@@ -327,7 +301,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                 </>
               )}
             </div>
-            <div>
+            <div style={{marginTop: '1rem'}}>
               <label className="input-label-with-icon">
                 Precio Total
               </label>
@@ -351,7 +325,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                 </>
               )}
             </div>
-            <div>
+            <div style={{marginTop: '1rem'}}>
               <label className="input-label-with-icon">
                 Mensaje Personalizado
               </label>

@@ -16,8 +16,6 @@ export default function DetalleHistorial({ subtitulo, contenido = [], tab = "His
             <thead>
               <tr>
                 <th>Cliente</th>
-                <th>Email</th>
-                <th>Teléfono</th>
                 <th>Lugar</th>
                 <th>Medio</th>
                 <th>Abonado</th>
@@ -30,18 +28,13 @@ export default function DetalleHistorial({ subtitulo, contenido = [], tab = "His
             <tbody>
               {rows.map((item, idx) => {                
                 return (
-                  <tr key={`${item.emailCliente || "row"}-${item.fechaReserva || idx}`}>
+                  <tr key={`${item.nombreCliente || "row"}-${item.fechaReserva || idx}`}>
                     <td>
                       <div className="patient-cell">
                         <span className="patient-name">{item.nombreCliente ?? "N/A"}</span>
                       </div>
                     </td>
-                    <td>
-                      <span className="block max-w-[200px] truncate" title={item.emailCliente ?? ""}>
-                        {item.emailCliente ?? "N/A"}
-                      </span>
-                    </td>
-                    <td>{item.telefonoCliente ?? "N/A"}</td>
+                   
                     <td>{item.lugarEncuentro ?? "N/A"}</td>
                     <td>
                       <span className="badge badge-individual">

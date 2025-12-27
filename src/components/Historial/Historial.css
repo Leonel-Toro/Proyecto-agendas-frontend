@@ -33,6 +33,7 @@
     border-radius: 1rem; /* rounded-2xl = 16px */
     transition: all 0.3s ease-out; /* transition-standard */
     overflow: hidden;
+    margin-top: 2rem;
 }
 
 .card-historial:hover {

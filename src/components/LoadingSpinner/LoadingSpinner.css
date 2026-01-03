@@ -1,0 +1,69 @@
+/* ============================================
+   LOADING SPINNER (Sistema de diseño cálido)
+   ============================================ */
+.loading-spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.loading-spinner-container.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-bg-warm); /* #FAF8F3 fondo cálido */
+  z-index: 9999;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  border-radius: 50%;
+  border-style: solid;
+  border-color: var(--color-accent-terra) transparent var(--color-accent-terra) transparent; /* #D4A59A terracota */
+  animation: spin 1.2s linear infinite;
+}
+
+/* Tamaños */
+.loading-spinner.sm .spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+.loading-spinner.md .spinner {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+.loading-spinner.lg .spinner {
+  width: 60px;
+  height: 60px;
+  border-width: 4px;
+}
+
+.loading-message {
+  margin-top: 1rem;
+  color: var(--color-text-light); /* #8C8174 */
+  font-size: 0.875rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

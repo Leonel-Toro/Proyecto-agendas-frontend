@@ -1,7 +1,17 @@
 import "./Header.css"
-import { Calendar, Clock, Sparkles, Menu } from 'lucide-react'
+import { Calendar, Clock, Sparkles, Menu, LogOut } from 'lucide-react'
+import { useAuth } from '../../hooks/useAuth'
+import { useNavigate } from 'react-router-dom'
 
 export default function Header({ cambiarVista, sidebarAbierto, toggleSidebar }) {
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+      await logout();
+      navigate('/login');
+    };
+
     return (
       <section className="header">
         {/* Botón hamburguesa para contraer/expandir */}
@@ -40,6 +50,25 @@ export default function Header({ cambiarVista, sidebarAbierto, toggleSidebar }) 
                 <span className="nav-text">Historial</span>
               </div>
             </nav>
+          )}
+
+          {/* Sección de usuario y logout */}
+          {sidebarAbierto && (
+            <div className="user-section">
+              {user && (
+                <div className="user-info">
+                  <span className="user-name">{user.username}</span>
+                </div>
+              )}
+              <button 
+                className="logout-btn"
+                onClick={handleLogout}
+                title="Cerrar sesión"
+              >
+                <LogOut className="nav-icon" />
+                <span className="nav-text">Cerrar sesión</span>
+              </button>
+            </div>
           )}
         </div>
       </section>

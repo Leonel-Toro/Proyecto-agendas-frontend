@@ -1,16 +1,17 @@
+import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import Formulario from './components/Formulario/Formulario'
 import Historial from './components/Historial/Historial'
 import Header from './components/Header/Header'
+import LoginPage from './pages/LoginPage/LoginPage'
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+import PublicRoute from './components/PublicRoute/PublicRoute'
 import { useState, useEffect } from 'react'
 
-function App() {
+// Componente Dashboard (contenido protegido)
+function Dashboard() {
 	const [vista, setVista] = useState('agendar');
 	const [sidebarAbierto, setSidebarAbierto] = useState(window.innerWidth >= 1024);
-	
-	function cambiarVista(vistaSeleccionada) {
-		setVista(vistaSeleccionada);
-	}
 
 	function toggleSidebar() {
 		setSidebarAbierto(!sidebarAbierto);
@@ -45,6 +46,32 @@ function App() {
 				{vista === 'historial' && <Historial />}
 			</main>
 		</>
+	);
+}
+
+function App() {
+	return (
+		<Routes>
+			{/* Rutas públicas (solo accesibles sin sesión) */}
+			<Route 
+				path="/login" 
+				element={
+					<PublicRoute>
+						<LoginPage />
+					</PublicRoute>
+				} 
+			/>
+
+			{/* Rutas protegidas (requieren autenticación) */}
+			<Route 
+				path="/*" 
+				element={
+					<ProtectedRoute>
+						<Dashboard />
+					</ProtectedRoute>
+				} 
+			/>
+		</Routes>
 	)
 }
 

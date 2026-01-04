@@ -1,8 +1,23 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_URL = import.meta.env.VITE_URL_BACKEND || 'http://localhost:8080';
+
+// Endpoints que NO deben intentar refresh automático
+const AUTH_ENDPOINTS = [
+  '/auth/login',
+  '/auth/register',
+  '/auth/refresh',
+  '/auth/logout',
+];
+
+/**
+ * Verifica si el endpoint es de autenticación (no debe hacer refresh)
+ */
+function isAuthEndpoint(endpoint) {
+  return AUTH_ENDPOINTS.some(authPath => endpoint.includes(authPath));
+}
 
 /**
  * Cliente API con manejo automático de cookies y refresh de tokens
- * @param {string} endpoint - El endpoint a llamar (ej: /api/auth/login)
+ * @param {string} endpoint - El endpoint a llamar (ej: /auth/login)
  * @param {RequestInit} options - Opciones de fetch
  * @returns {Promise<any>} - Respuesta JSON del servidor
  */
@@ -16,9 +31,9 @@ export async function apiFetch(endpoint, options = {}) {
     },
   });
 
-  // Si es 401, intentar refresh
-  if (response.status === 401) {
-    const refreshResponse = await fetch(`${API_URL}/api/auth/refresh`, {
+  // Si es 401 y NO es un endpoint de auth, intentar refresh
+  if (response.status === 401 && !isAuthEndpoint(endpoint)) {
+    const refreshResponse = await fetch(`${API_URL}/auth/refresh`, {
       method: 'POST',
       credentials: 'include',
     });
@@ -45,6 +60,7 @@ export async function apiFetch(endpoint, options = {}) {
     }
   }
 
+  // Para endpoints de auth o respuestas no-401, manejar normalmente
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: 'Error en la petición' }));
     throw new Error(error.message || 'Error en la petición');

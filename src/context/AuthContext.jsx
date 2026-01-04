@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
   const checkSession = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await apiFetch('/api/auth/check-session');
+      const response = await apiFetch('/auth/check-session');
       
       if (response.success && response.user) {
         setUser(response.user);
@@ -45,7 +45,7 @@ export function AuthProvider({ children }) {
   const login = async (credentials) => {
     try {
       setError(null);
-      const response = await apiFetch('/api/auth/login', {
+      const response = await apiFetch('/auth/login', {
         method: 'POST',
         body: JSON.stringify(credentials),
       });
@@ -69,7 +69,7 @@ export function AuthProvider({ children }) {
   const register = async (credentials) => {
     try {
       setError(null);
-      const response = await apiFetch('/api/auth/register', {
+      const response = await apiFetch('/auth/register', {
         method: 'POST',
         body: JSON.stringify(credentials),
       });
@@ -90,7 +90,7 @@ export function AuthProvider({ children }) {
    */
   const logout = async () => {
     try {
-      await apiFetch('/api/auth/logout', {
+      await apiFetch('/auth/logout', {
         method: 'POST',
       });
     } catch (err) {

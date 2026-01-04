@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
-import { apiFetch } from '../api/apiClient';
+import { apiFetch, clearTokens, getAccessToken } from '../api/apiClient';
 
 // Crear el contexto
 export const AuthContext = createContext(null);
@@ -18,20 +18,32 @@ export function AuthProvider({ children }) {
 
   /**
    * Verificar sesión activa al cargar la aplicación
+   * Usa tokens almacenados en localStorage (compatible con Safari/iOS)
    */
   const checkSession = useCallback(async () => {
     try {
       setIsLoading(true);
+      
+      // Verificar si hay token guardado antes de hacer la petición
+      const token = getAccessToken();
+      if (!token) {
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
+      
       const response = await apiFetch('/auth/check-session');
       
       if (response.success && response.user) {
         setUser(response.user);
       } else {
         setUser(null);
+        clearTokens(); // Limpiar tokens inválidos
       }
     } catch (err) {
       // Si falla (401 o error), no hay sesión activa
       setUser(null);
+      clearTokens(); // Limpiar tokens inválidos
     } finally {
       setIsLoading(false);
     }
@@ -97,6 +109,7 @@ export function AuthProvider({ children }) {
       // Aunque falle la petición, limpiamos el estado local
       console.error('Error al cerrar sesión:', err);
     } finally {
+      clearTokens(); // Limpiar tokens de localStorage
       setUser(null);
       setError(null);
     }

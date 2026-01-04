@@ -24,7 +24,7 @@ function isAuthEndpoint(endpoint) {
 export async function apiFetch(endpoint, options = {}) {
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
-    credentials: 'include', // ¡IMPORTANTE para enviar cookies!
+    credentials: 'include', 
     headers: {
       'Content-Type': 'application/json',
       ...options.headers,

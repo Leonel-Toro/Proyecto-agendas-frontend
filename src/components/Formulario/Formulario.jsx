@@ -4,9 +4,9 @@ import "./Formulario.css"
 import "../../App.css"
 import CalendarioHora from "./CalendarioHora/CalendarioHora"
 import { useState } from "react"
+import { apiPost } from '../../api/apiClient'
 
 export default function Formulario() {
-    const urlBase = import.meta.env.VITE_URL_BACKEND;
     const [payload, setPayload] = useState({
         nombreCliente: "",
         medioCliente: "",
@@ -187,24 +187,7 @@ export default function Formulario() {
         console.log("Payload enviado a la API:", payloadNormalizado);
 
         try {
-            const res = await fetch(`${urlBase}/reservas/agendar`, {
-                method: "POST",            
-                headers: {
-                    "Content-Type": "application/json",          
-                },
-                body: JSON.stringify(payloadNormalizado)
-            });
-
-            const contentType = res.headers.get("content-type") || "";
-            const data = contentType.includes("application/json")
-            ? await res.json()
-            : await res.text();
-            
-            if (!res.ok) {
-                console.error("Error del servidor:", res.status, data.mensaje);
-                setErrorMessage(data.mensaje || "Ha ocurrido un error");
-                return;
-            }
+            const data = await apiPost('/reservas/agendar', payloadNormalizado);
             
             // Mostrar modal de éxito
             const mensajeRespuesta = typeof data === 'object' && data?.mensaje 
@@ -214,7 +197,7 @@ export default function Formulario() {
             setModalExitoAbierto(true);
         }catch(error) {
             console.error("Error de red:", error);
-            setErrorMessage("Error de conexión con el servidor");
+            setErrorMessage(error.message || "Error de conexión con el servidor");
             return;
         }
     }

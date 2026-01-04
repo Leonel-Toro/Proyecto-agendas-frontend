@@ -5,6 +5,7 @@ import ModalExito from "../ModalExito/ModalExito";
 import BotonHeader from "../BotonHeader/BotonHeader";
 import { useEffect, useMemo, useState } from "react";
 import { LayoutList, Clock, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { apiGet, apiPut } from '../../api/apiClient';
 
 const TABS = [
   { id: "Historial", label: "Historial", icono: LayoutList },
@@ -15,8 +16,6 @@ const TABS = [
 const REGISTROS_POR_PAGINA = 30;
 
 export default function Historial() {
-  const urlBase = import.meta.env.VITE_URL_BACKEND;
-
   const [items, setItems] = useState([]);
   const [tab, setTab] = useState("Historial");   
   const [loading, setLoading] = useState(true);
@@ -32,17 +31,8 @@ export default function Historial() {
     (async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${urlBase}/reservas/historial`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-
-        const contentType = res.headers.get("content-type") || "";
-        const data = contentType.includes("application/json") ? await res.json() : null;
-        console.log(data);
-        if (!res.ok) {
-          throw new Error((data && (data.message || data.error)) || "Error en la solicitud");
-        }
+        const data = await apiGet('/reservas/historial');
+        
         if (!abort) {
           const registros = data?.entidad && Array.isArray(data.entidad) ? data.entidad : [];
           const map = new Map();
@@ -88,10 +78,11 @@ export default function Historial() {
         setLoading(false);
       } catch (e) {
         console.log(e.message || "Error del servidor");
+        setLoading(false);
       }
     })();
     return () => { abort = true; };
-  }, [urlBase]);
+  }, []);
 
   const filtrados = useMemo(() => {
     if (tab === "Historial") return items;
@@ -176,20 +167,7 @@ export default function Historial() {
         mensajePersonalizado: reservaActualizada?.mensajePersonalizado ?? "",
       };
 
-      const res = await fetch(`${urlBase}/reservas/editar`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payloadNormalizado),
-      });
-
-      const contentType = res.headers.get("content-type") || "";
-      const data = contentType.includes("application/json") ? await res.json() : await res.text();
-
-      if (!res.ok) {
-        const mensaje = typeof data === 'string' ? data : (data?.mensaje || data?.message || 'Error al editar la reserva');
-        console.error("Error al editar reserva:", res.status, mensaje);
-        throw new Error(mensaje);
-      }
+      const data = await apiPut('/reservas/editar', payloadNormalizado);
 
       // Cerrar modal de edición
       setModalAbierto(false);

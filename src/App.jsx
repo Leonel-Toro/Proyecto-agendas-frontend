@@ -20,7 +20,7 @@ function Dashboard() {
 	useEffect(() => {
 		const handleResize = () => {
 			const width = window.innerWidth;
-			if (width >= 768) {
+			if (width >= 1024) {
 				setSidebarAbierto(true);
 			} else {
 				setSidebarAbierto(false);

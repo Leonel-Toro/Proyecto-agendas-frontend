@@ -114,6 +114,12 @@
   .header-container.abierto {
     transform: translateX(0);
   }
+  .header-container{
+    position: absolute !important;
+  }
+  .main-container.sidebar-abierto {
+    margin-left: 0;
+  }
 }
 
 /* Responsividad para móviles */

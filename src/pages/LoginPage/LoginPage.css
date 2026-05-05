@@ -212,6 +212,41 @@
   }
 }
 
+.required {
+  color: var(--color-accent-terra);
+}
+
+.form-group select {
+  border-radius: 1rem;
+  border: 2px solid rgba(232, 223, 208, 0.6);
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease-out;
+  background-color: rgba(255, 255, 255, 0.8);
+  outline: none;
+  font-family: 'Quicksand', system-ui, sans-serif;
+  color: var(--color-text-brown);
+}
+
+.form-group select:focus {
+  border-color: var(--color-accent-terra);
+  box-shadow: 0 0 0 3px rgba(212, 165, 154, 0.15);
+}
+
+.form-group-checkbox {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-group-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   .login-card {

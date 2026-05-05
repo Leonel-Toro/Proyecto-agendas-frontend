@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_URL_BACKEND || 'http://localhost:8080';
+const API_URL = import.meta.env.VITE_URL_BACKEND;
 
 // Claves para localStorage
 const ACCESS_TOKEN_KEY = 'accessToken';
@@ -97,7 +97,7 @@ export async function apiFetch(endpoint, options = {}) {
     }
 
     const refreshResponse = await fetch(`${API_URL}/auth/refresh`, {
-      method: 'POST',
+      method: 'POST', 
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
@@ -167,6 +167,16 @@ export function apiPost(endpoint, body) {
 export function apiPut(endpoint, body) {
   return apiFetch(endpoint, {
     method: 'PUT',
+    body: JSON.stringify(body),
+  });
+}
+
+/**
+ * Petición PATCH
+ */
+export function apiPatch(endpoint, body) {
+  return apiFetch(endpoint, {
+    method: 'PATCH',
     body: JSON.stringify(body),
   });
 }

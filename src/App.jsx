@@ -2,14 +2,16 @@ import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import Formulario from './components/Formulario/Formulario'
 import Historial from './components/Historial/Historial'
+import HistorialClinico from './components/HistorialClinico/HistorialClinico'
 import Header from './components/Header/Header'
 import LoginPage from './pages/LoginPage/LoginPage'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import PublicRoute from './components/PublicRoute/PublicRoute'
 import { useState, useEffect } from 'react'
+import { useAuth } from './hooks/useAuth'
 
-// Componente Dashboard (contenido protegido)
 function Dashboard() {
+	const { isAdmin } = useAuth();
 	const [vista, setVista] = useState('agendar');
 	const [sidebarAbierto, setSidebarAbierto] = useState(window.innerWidth >= 1024);
 
@@ -19,14 +21,8 @@ function Dashboard() {
 
 	useEffect(() => {
 		const handleResize = () => {
-			const width = window.innerWidth;
-			if (width >= 1024) {
-				setSidebarAbierto(true);
-			} else {
-				setSidebarAbierto(false);
-			}
+			setSidebarAbierto(window.innerWidth >= 1024);
 		};
-
 		window.addEventListener('resize', handleResize);
 		handleResize();
 		return () => window.removeEventListener('resize', handleResize);
@@ -35,15 +31,16 @@ function Dashboard() {
 	return (
 		<>
 			<header className={`header-container ${sidebarAbierto ? 'abierto' : 'cerrado'}`}>
-				<Header 
-					cambiarVista={setVista} 
+				<Header
+					cambiarVista={setVista}
 					sidebarAbierto={sidebarAbierto}
 					toggleSidebar={toggleSidebar}
 				/>
-			</header>        
+			</header>
 			<main className={`main-container ${sidebarAbierto ? 'sidebar-abierto' : 'sidebar-cerrado'}`}>
 				{vista === 'agendar' && <Formulario />}
 				{vista === 'historial' && <Historial />}
+				{vista === 'historialClinico' && isAdmin && <HistorialClinico />}
 			</main>
 		</>
 	);
@@ -52,24 +49,21 @@ function Dashboard() {
 function App() {
 	return (
 		<Routes>
-			{/* Rutas públicas (solo accesibles sin sesión) */}
-			<Route 
-				path="/login" 
+			<Route
+				path="/login"
 				element={
 					<PublicRoute>
 						<LoginPage />
 					</PublicRoute>
-				} 
+				}
 			/>
-
-			{/* Rutas protegidas (requieren autenticación) */}
-			<Route 
-				path="/*" 
+			<Route
+				path="/*"
 				element={
 					<ProtectedRoute>
 						<Dashboard />
 					</ProtectedRoute>
-				} 
+				}
 			/>
 		</Routes>
 	)

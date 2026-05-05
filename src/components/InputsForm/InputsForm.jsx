@@ -1,9 +1,21 @@
 import styles from "./InputsForm.module.css";
-import { ESTADOS, MEDIO_OPCIONES } from "../../constants/estados";
+import {
+  ESTADO_OPCIONES,
+  MODALIDAD_OPCIONES,
+  DURACION_OPCIONES,
+  TIPO_SESION_OPCIONES,
+  GENERO_OPCIONES,
+} from "../../constants/estados";
 
 export default function InputsForm({ titulo, type, placeholder, input, value, name, changePayload }) {
-  const MedioOpciones = Object.entries(MEDIO_OPCIONES).map(([value, label]) => ({ value: Number(value), label }));
-  const estadoOpciones = Object.entries(ESTADOS).map(([value, label]) => ({ value: Number(value), label }));
+  function getOpciones() {
+    if (name === "estado") return ESTADO_OPCIONES;
+    if (name === "modalidad") return MODALIDAD_OPCIONES;
+    if (name === "duracionMinutos") return DURACION_OPCIONES;
+    if (name === "tipoSesion") return TIPO_SESION_OPCIONES;
+    if (name === "genero") return GENERO_OPCIONES;
+    return [];
+  }
 
   function inputType(kind) {
     if (kind === 'input') {
@@ -32,6 +44,7 @@ export default function InputsForm({ titulo, type, placeholder, input, value, na
       );
     }
     if (kind === 'select') {
+      const opciones = getOpciones();
       return (
         <select
           className={`form-control ${styles.selectForm}`}
@@ -41,10 +54,7 @@ export default function InputsForm({ titulo, type, placeholder, input, value, na
           onChange={changePayload}
         >
           <option value="">Selecciona una opción</option>
-          {name === "medioCliente" && MedioOpciones.map((option) => (
-            <option key={option.value} value={option.value}>{option.label}</option>
-          ))}
-          {name === "estado" && estadoOpciones.map((option) => (
+          {opciones.map((option) => (
             <option key={option.value} value={option.value}>{option.label}</option>
           ))}
         </select>

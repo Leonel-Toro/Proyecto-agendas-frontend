@@ -250,9 +250,9 @@ export default function Historial() {
 
               {filtrados.length > 0 && (
                 <div className="text-center text-sm text-zinc-600 mt-4">
-                  Mostrando {(paginaActual - 1) * REGISTROS_POR_PAGINA + 1} a{' '}
+                  Mostrando página {(paginaActual - 1) * REGISTROS_POR_PAGINA + 1} de{' '}
                   {Math.min(paginaActual * REGISTROS_POR_PAGINA, filtrados.length)} de{' '}
-                  {filtrados.length} registros
+                  {filtrados.length} reservas
                 </div>
               )}
             </>

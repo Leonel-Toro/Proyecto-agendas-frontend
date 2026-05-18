@@ -19,7 +19,7 @@ export default function Formulario() {
       modalidad: '',
       duracionMinutos: 60,
       fechaReserva: new Date(),
-      precio: !isAdmin ? (user?.estudiante ? 10000 : 15000) : 0,
+      precio: !isAdmin ? (user?.estudiante ? 10000 : 15000) : 15000,
       abonado: 0,
     };
   }

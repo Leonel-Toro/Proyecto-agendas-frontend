@@ -158,7 +158,7 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
             <div className="patient-details">
               <h3>{reserva.pacienteNombre || 'N/A'}</h3>
               {reserva.pacienteRut && <p className="text-sm text-gray-500">{reserva.pacienteRut}</p>}
-              <p>Reserva #{reserva.id || 'N/A'}</p>
+              <p>Reserva {reserva.id || 'N/A'}</p>
             </div>
           </div>
 

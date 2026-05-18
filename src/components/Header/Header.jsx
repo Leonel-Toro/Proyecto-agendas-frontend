@@ -62,7 +62,7 @@ export default function Header({ cambiarVista, sidebarAbierto, toggleSidebar }) 
               {user && (
                 <div className="user-info">
                   <span className="user-name">{user.username}</span>
-                  {isAdmin && <span className="text-xs text-gray-400">Admin</span>}
+                  {isAdmin && <span className="text-xs text-gray-400">Psicólogo</span>}
                 </div>
               )}
               <button className="logout-btn" onClick={handleLogout} title="Cerrar sesión">

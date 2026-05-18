@@ -4,7 +4,6 @@ import { apiPost, apiPut, apiDelete } from '../../api/apiClient';
 import { TIPO_SESION_OPCIONES } from '../../constants/estados';
 
 const INITIAL_FORM = {
-  idReserva: '',
   motivoConsulta: '',
   tipoSesion: '',
   crisis: false,
@@ -24,13 +23,8 @@ export default function DetalleHistorialModal({ historial, modo = 'ver', pacient
   useEffect(() => {
     if (historial) {
       setFormData({
-        idReserva: historial.idReserva || '',
-        motivoConsulta: historial.motivoConsulta || '',
-        tipoSesion: historial.tipoSesion || '',
-        crisis: historial.crisis || false,
-        alta: historial.alta || false,
-        posibleAbandono: historial.posibleAbandono || false,
-        notasGenerales: historial.notasGenerales || '',
+        idReserva: historial.idReserva,      
+        notasGenerales: historial.notasGenerales,
       });
       setNotas(Array.isArray(historial.notasSesion) ? historial.notasSesion : []);
     } else {
@@ -142,96 +136,9 @@ export default function DetalleHistorialModal({ historial, modo = 'ver', pacient
           </div>
         </div>
 
-        <div className="modal-body space-y-5">
-
-          {/* ID Reserva (solo crear) */}
-          {modo === 'crear' && (
-            <div>
-              <label className="input-label-with-icon">ID de la Reserva *</label>
-              <input
-                type="number"
-                name="idReserva"
-                value={formData.idReserva}
-                onChange={handleChange}
-                placeholder="Ej: 12"
-                min={1}
-                className="input-field-custom"
-              />
-              {errors.idReserva && <p className="text-red-500 text-xs mt-1">{errors.idReserva}</p>}
-            </div>
-          )}
-
-          {/* Tipo de Sesión */}
-          <div>
-            <label className="input-label-with-icon">Tipo de Sesión *</label>
-            {esVer ? (
-              <p className="text-gray-900">{fmtTipoSesion(formData.tipoSesion)}</p>
-            ) : (
-              <>
-                <select
-                  name="tipoSesion"
-                  value={formData.tipoSesion}
-                  onChange={handleChange}
-                  className="input-field-custom"
-                >
-                  <option value="">Selecciona una opción</option>
-                  {TIPO_SESION_OPCIONES.map(o => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
-                  ))}
-                </select>
-                {errors.tipoSesion && <p className="text-red-500 text-xs mt-1">{errors.tipoSesion}</p>}
-              </>
-            )}
-          </div>
-
-          {/* Checkboxes */}
-          <div className="grid grid-cols-3 gap-4">
-            {[
-              { name: 'crisis', label: 'Crisis' },
-              { name: 'alta', label: 'Alta' },
-              { name: 'posibleAbandono', label: 'Posible abandono' },
-            ].map(({ name, label }) => (
-              <div key={name} className="flex items-center gap-2">
-                {esVer ? (
-                  <>
-                    <span className={`w-4 h-4 rounded border ${formData[name] ? 'bg-[#A8B5A0] border-[#A8B5A0]' : 'border-gray-300'}`}></span>
-                    <span className="text-sm text-gray-700">{label}</span>
-                  </>
-                ) : (
-                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      name={name}
-                      checked={formData[name]}
-                      onChange={handleChange}
-                      className="w-4 h-4"
-                    />
-                    {label}
-                  </label>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Motivo de Consulta */}
-          <div>
-            <label className="input-label-with-icon">Motivo de Consulta</label>
-            {esVer ? (
-              <p className="text-gray-900">{formData.motivoConsulta || 'Sin especificar'}</p>
-            ) : (
-              <textarea
-                name="motivoConsulta"
-                value={formData.motivoConsulta}
-                onChange={handleChange}
-                rows="3"
-                placeholder="Motivo de la consulta..."
-                className="input-field-custom resize-none"
-              />
-            )}
-          </div>
-
+        <div className="modal-body">
           {/* Notas Generales */}
-          <div>
+          <div className="mb-[1rem]">
             <label className="input-label-with-icon">Notas Generales</label>
             {esVer ? (
               <p className="text-gray-900 whitespace-pre-wrap">{formData.notasGenerales || 'Sin notas'}</p>
@@ -246,51 +153,6 @@ export default function DetalleHistorialModal({ historial, modo = 'ver', pacient
               />
             )}
           </div>
-
-          {/* Notas de Sesión */}
-          {historial && (
-            <div>
-              <label className="input-label-with-icon">Notas de Sesión</label>
-              <div className="space-y-2 mb-3">
-                {notas.length === 0 && (
-                  <p className="text-sm text-gray-500">Sin notas de sesión</p>
-                )}
-                {notas.map((n) => (
-                  <div key={n.idNota} className="flex items-start justify-between gap-2 bg-zinc-50 rounded-lg p-3 border border-zinc-200">
-                    <p className="text-sm text-gray-700 flex-1">{n.nota}</p>
-                    {!esVer && (
-                      <button
-                        onClick={() => handleEliminarNota(n.idNota)}
-                        className="text-red-400 hover:text-red-600 flex-shrink-0"
-                        title="Eliminar nota"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {!esVer && (
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={nuevaNota}
-                    onChange={e => setNuevaNota(e.target.value)}
-                    placeholder="Agregar nota..."
-                    className="input-field-custom flex-1"
-                    onKeyDown={e => e.key === 'Enter' && handleAgregarNota()}
-                  />
-                  <button
-                    onClick={handleAgregarNota}
-                    disabled={!nuevaNota.trim()}
-                    className="px-3 py-2 bg-[#A8B5A0] text-white rounded-lg hover:bg-[#8fa587] transition-colors disabled:opacity-50"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Footer */}

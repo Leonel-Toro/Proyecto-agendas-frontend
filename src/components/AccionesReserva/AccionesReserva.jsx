@@ -34,7 +34,7 @@ export default function AccionesReserva({ item, onVer, onEditar, onCancelar, onC
       )}
       {isAdmin && item.estado !== 'COMPLETADA' && item.estado !== 'CANCELADA' && (
         <button
-          onClick={() => onCompletar?.(item.id)}
+          onClick={() => onCompletar?.(item)}
           title="Completar"
           className="p-2 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors text-green-600"
         >

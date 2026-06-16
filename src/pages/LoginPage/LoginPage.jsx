@@ -128,8 +128,8 @@ function LoginPage() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-header">
-          <h1>Agendas</h1>
-          <p>Sistema de gestión de citas</p>
+          <h1>PsicoGestion</h1>
+          <p>Bienvenido!, Inicia sesión o crea una cuenta para acceder.</p>
         </div>
 
         <div className="login-tabs">

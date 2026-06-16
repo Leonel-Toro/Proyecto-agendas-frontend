@@ -243,6 +243,8 @@ export default function DetalleReservaModal({ reserva, modo = 'ver', onClose, on
                     name="fechaReserva"
                     value={formData.fechaReserva}
                     changePayload={handleCalendarioChange('fechaReserva')}
+                    psicologoId={reserva?.psicologoId}
+                    excludeReservaId={reserva?.id}
                   />
                   {touched.fechaReserva && errors.fechaReserva && (
                     <p className="text-red-500 text-xs mt-1 ml-1">{errors.fechaReserva}</p>

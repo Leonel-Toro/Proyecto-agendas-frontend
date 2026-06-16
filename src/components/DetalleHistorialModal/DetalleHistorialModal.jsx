@@ -1,6 +1,6 @@
-import { X, Plus, Trash2 } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { apiPost, apiPut, apiDelete } from '../../api/apiClient';
+import { apiPost, apiPut } from '../../api/apiClient';
 import { TIPO_SESION_OPCIONES } from '../../constants/estados';
 
 const INITIAL_FORM = {
@@ -14,8 +14,6 @@ const INITIAL_FORM = {
 
 export default function DetalleHistorialModal({ historial, modo = 'ver', pacienteId, onClose, onGuardado }) {
   const [formData, setFormData] = useState(INITIAL_FORM);
-  const [notas, setNotas] = useState([]);
-  const [nuevaNota, setNuevaNota] = useState('');
   const [errors, setErrors] = useState({});
   const [guardando, setGuardando] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -26,10 +24,8 @@ export default function DetalleHistorialModal({ historial, modo = 'ver', pacient
         idReserva: historial.idReserva,      
         notasGenerales: historial.notasGenerales,
       });
-      setNotas(Array.isArray(historial.notasSesion) ? historial.notasSesion : []);
     } else {
       setFormData(INITIAL_FORM);
-      setNotas([]);
     }
     setErrors({});
     setErrorMessage('');
@@ -81,27 +77,6 @@ export default function DetalleHistorialModal({ historial, modo = 'ver', pacient
       setErrorMessage(e.message || 'Error al guardar el historial');
     } finally {
       setGuardando(false);
-    }
-  };
-
-  const handleAgregarNota = async () => {
-    if (!nuevaNota.trim() || !historial?.idHistorial) return;
-    try {
-      const resp = await apiPost(`/admin/historial/${historial.idHistorial}/notas`, { nota: nuevaNota.trim() });
-      const notaCreada = resp?.entidad || { nota: nuevaNota.trim(), idNota: Date.now(), fechaCreacion: new Date().toISOString() };
-      setNotas(prev => [...prev, notaCreada]);
-      setNuevaNota('');
-    } catch (e) {
-      setErrorMessage(e.message || 'Error al agregar la nota');
-    }
-  };
-
-  const handleEliminarNota = async (idNota) => {
-    try {
-      await apiDelete(`/admin/historial/notas/${idNota}`);
-      setNotas(prev => prev.filter(n => n.idNota !== idNota));
-    } catch (e) {
-      setErrorMessage(e.message || 'Error al eliminar la nota');
     }
   };
 

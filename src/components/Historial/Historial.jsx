@@ -4,7 +4,7 @@ import DetalleReservaModal from "../DetalleReservaModal/DetalleReservaModal";
 import ModalExito from "../ModalExito/ModalExito";
 import { useEffect, useMemo, useState } from "react";
 import { LayoutList, Clock, CheckCircle, XCircle, ChevronLeft, ChevronRight } from 'lucide-react';
-import { apiGet, apiPut, apiPatch, apiDelete } from '../../api/apiClient';
+import { apiGet, apiPost, apiPut, apiPatch, apiDelete } from '../../api/apiClient';
 import { useAuth } from '../../hooks/useAuth';
 
 const TABS = [
@@ -116,11 +116,11 @@ export default function Historial() {
     }
   };
 
-  const handleCompletarReserva = async (id) => {
+  const handleCompletarReserva = async (reserva) => {
     try {
-      await apiPatch(`/admin/reservas/${id}/completar`, {});
+      await apiPatch(`/admin/reservas/${reserva.id}/completar`, {});
       setItems(prev => prev.map(item =>
-        item.id === id ? { ...item, estado: 'COMPLETADA' } : item
+        item.id === reserva.id ? { ...item, estado: 'COMPLETADA' } : item
       ));
       setMensajeExito('Reserva marcada como completada');
       setModalExitoAbierto(true);

@@ -17,10 +17,14 @@ export default function Formulario() {
       pacienteId: !isAdmin ? (user?.id ?? '') : '',
       motivoConsulta: '',
       modalidad: '',
+      tipoSesion: '',
       duracionMinutos: 60,
       fechaReserva: new Date(),
       precio: !isAdmin ? (user?.estudiante ? 10000 : 15000) : 15000,
       abonado: 0,
+      crisis: false,
+      alta: false,
+      posibleAbandono: false,
     };
   }
 
@@ -84,6 +88,9 @@ export default function Formulario() {
         }
         break;
       }
+      case 'tipoSesion':
+        if (isAdmin && !value) error = 'El tipo de sesión es obligatorio';
+        break;
     }
     setErrors(prev => ({ ...prev, [name]: error }));
     return error;
@@ -91,7 +98,9 @@ export default function Formulario() {
 
   function handlePayload(inputEvent) {
     const name = inputEvent.target !== undefined ? inputEvent.target.name : inputEvent.name;
-    let value = inputEvent.target !== undefined ? inputEvent.target.value : inputEvent.value;
+    let value = inputEvent.target !== undefined
+      ? (inputEvent.target.type === 'checkbox' ? inputEvent.target.checked : inputEvent.target.value)
+      : inputEvent.value;
 
     const nuevoPayload = { ...payload, [name]: value };
     setPayload(nuevoPayload);
@@ -109,7 +118,7 @@ export default function Formulario() {
 
     const camposRequeridos = ['modalidad', 'duracionMinutos', 'fechaReserva'];
     if (!isAdmin) camposRequeridos.push('psicologoId');
-    if (isAdmin) camposRequeridos.push('pacienteId', 'precio', 'abonado');
+    if (isAdmin) camposRequeridos.push('pacienteId', 'precio', 'abonado', 'tipoSesion');
 
     const newTouched = camposRequeridos.reduce((acc, k) => ({ ...acc, [k]: true }), {});
     setTouched(prev => ({ ...prev, ...newTouched }));
@@ -137,12 +146,32 @@ export default function Formulario() {
     if (isAdmin) {
       payloadNormalizado.pacienteId = Number(payload.pacienteId);
       payloadNormalizado.abonado = Number(payload.abonado);
+      payloadNormalizado.tipoSesion = payload.tipoSesion;
+      payloadNormalizado.crisis = payload.crisis;
+      payloadNormalizado.alta = payload.alta;
+      payloadNormalizado.posibleAbandono = payload.posibleAbandono;
     }
 
     const endpoint = isAdmin ? '/admin/reservas' : '/reservas';
 
     try {
       const data = await apiPost(endpoint, payloadNormalizado);
+      if (isAdmin) {
+        const idReserva = data?.entidad?.id;
+        if (idReserva) {
+          apiPost('/admin/historial', {
+            idReserva,
+            psicologoId: payloadNormalizado.psicologoId,
+            pacienteId: payloadNormalizado.pacienteId,
+            motivoConsulta: payloadNormalizado.motivoConsulta ?? '',
+            tipoSesion: payloadNormalizado.tipoSesion,
+            crisis: payloadNormalizado.crisis,
+            alta: payloadNormalizado.alta,
+            posibleAbandono: payloadNormalizado.posibleAbandono,
+            notasGenerales: '',
+          }).catch(() => {});
+        }
+      }
       const mensajeRespuesta = data?.mensaje || 'La reserva se ha agendado correctamente';
       setMensajeExito(mensajeRespuesta);
       setModalExitoAbierto(true);
@@ -299,6 +328,44 @@ export default function Formulario() {
                 />
               </div>
 
+              {isAdmin && (
+                <>
+                  <div className="grid grid-cols-1 my-[1rem] gap-3">
+                    <div className="min-h-[95px]">
+                      <InputsForm
+                        titulo="Tipo de Sesión"
+                        input="select"
+                        name="tipoSesion"
+                        value={payload.tipoSesion}
+                        changePayload={handlePayload}
+                      />
+                      {touched.tipoSesion && errors.tipoSesion && (
+                        <p className="text-red-500 text-xs mt-1 ml-1">{errors.tipoSesion}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-4 my-[1rem]">
+                    {[
+                      { name: 'crisis', label: 'Crisis' },
+                      { name: 'alta', label: 'Alta' },
+                      { name: 'posibleAbandono', label: 'Posible Abandono' },
+                    ].map(({ name, label }) => (
+                      <label key={name} className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          name={name}
+                          checked={payload[name]}
+                          onChange={handlePayload}
+                          className="w-4 h-4 accent-[#A8B5A0] cursor-pointer"
+                        />
+                        <span className="text-sm text-[#4a4238] font-medium">{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </>
+              )}
+
               {/* Sección 2: Fecha y hora */}
               <div className="mt-[2.5rem] mb-6">
                 <div className="titulo-formulario bg-white/80 p-1 inline-flex items-center gap-2 shadow-md">
@@ -313,6 +380,7 @@ export default function Formulario() {
                     name="fechaReserva"
                     changePayload={handlePayload}
                     value={payload.fechaReserva}
+                    psicologoId={isAdmin ? user?.id : payload.psicologoId}
                   />
                   {touched.fechaReserva && errors.fechaReserva && (
                     <p className="text-red-500 text-xs mt-1 ml-1">{errors.fechaReserva}</p>

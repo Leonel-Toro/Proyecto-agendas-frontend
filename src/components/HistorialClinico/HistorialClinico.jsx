@@ -2,76 +2,85 @@ import { useState, useEffect } from 'react';
 import { apiGet } from '../../api/apiClient';
 import { formateaFecha } from '../../constants/estados';
 import NotasSesion from '../NotasSesion/NotasSesion';
-import { Search, CheckCircle, StickyNote } from 'lucide-react';
+import { Search, StickyNote, ClipboardList } from 'lucide-react';
 import '../Historial/Historial.css';
 import '../DetalleHistorial/DetalleHistorial.css';
+
+const TIPO_SESION_LABELS = {
+  INICIAL: 'Inicial',
+  SEGUIMIENTO: 'Seguimiento',
+  CRISIS: 'Crisis',
+  EVALUACION: 'Evaluación',
+  CIERRE: 'Cierre',
+};
 
 export default function HistorialClinico() {
   const [pacienteId, setPacienteId] = useState('');
   const [desde, setDesde] = useState('');
   const [hasta, setHasta] = useState('');
-  const [todasCompletadas, setTodasCompletadas] = useState([]);
-  const [reservasFiltradas, setReservasFiltradas] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [historiales, setHistoriales] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [loadingPacientes, setLoadingPacientes] = useState(true);
   const [pacientes, setPacientes] = useState([]);
   const [error, setError] = useState('');
-  const [reservaNotas, setReservaNotas] = useState(null);
+  const [historialSeleccionado, setHistorialSeleccionado] = useState(null);
+  const [buscado, setBuscado] = useState(false);
 
-  // Cargar pacientes y todas las reservas completadas al montar
   useEffect(() => {
-    Promise.all([
-      apiGet('/admin/pacientes'),
-      apiGet('/admin/reservas'),
-    ])
-      .then(([pacientesData, reservasData]) => {
-        const listaPacientes = Array.isArray(pacientesData?.entidad)
-          ? pacientesData.entidad
-          : (Array.isArray(pacientesData) ? pacientesData : []);
-        setPacientes(listaPacientes);
-
-        const allReservas = Array.isArray(reservasData?.entidad) ? reservasData.entidad : [];
-        const completadas = allReservas
-          .filter(r => r.estado === 'COMPLETADA')
-          .sort((a, b) => new Date(b.fechaReserva) - new Date(a.fechaReserva));
-        setTodasCompletadas(completadas);
-        setReservasFiltradas(completadas);
+    apiGet('/admin/pacientes')
+      .then(data => {
+        const lista = Array.isArray(data?.entidad) ? data.entidad : (Array.isArray(data) ? data : []);
+        setPacientes(lista);
       })
       .catch(() => {})
-      .finally(() => {
-        setLoading(false);
-        setLoadingPacientes(false);
-      });
+      .finally(() => setLoadingPacientes(false));
   }, []);
 
-  const buscar = (e) => {
+  const buscar = async (e) => {
     e.preventDefault();
     setError('');
 
-    const selectedPaciente = pacienteId && Number(pacienteId) > 0
-      ? pacientes.find(p => String(p.id) === String(pacienteId))
-      : null;
+    if (!pacienteId || Number(pacienteId) <= 0) {
+      setError('Selecciona un paciente para buscar su historial');
+      return;
+    }
 
-    const filtradas = todasCompletadas.filter(r => {
-      if (selectedPaciente) {
-        const matchId =
-          (r.idPaciente !== undefined && String(r.idPaciente) === String(pacienteId)) ||
-          (r.pacienteId !== undefined && String(r.pacienteId) === String(pacienteId)) ||
-          (r.pacienteNombre && r.pacienteNombre.toLowerCase().includes(selectedPaciente.nombre.toLowerCase()));
-        if (!matchId) return false;
+    setLoading(true);
+    setBuscado(true);
+
+    try {
+      let data;
+      if (desde && hasta) {
+        const desdeISO = new Date(`${desde}T00:00:00`).toISOString();
+        const hastaISO = new Date(`${hasta}T23:59:59`).toISOString();
+        data = await apiGet(
+          `/admin/historial/paciente/${pacienteId}/rango?desde=${encodeURIComponent(desdeISO)}&hasta=${encodeURIComponent(hastaISO)}`
+        );
+      } else {
+        data = await apiGet(`/admin/historial/paciente/${pacienteId}`);
       }
-      if (!desde && !hasta) return true;
-      const fecha = new Date(r.fechaReserva);
-      if (desde && fecha < new Date(desde)) return false;
-      if (hasta && fecha > new Date(`${hasta}T23:59:59`)) return false;
-      return true;
-    });
-
-    setReservasFiltradas(filtradas);
+      setHistoriales(Array.isArray(data?.entidad) ? data.entidad : []);
+    } catch {
+      setHistoriales([]);
+      setError('No se pudo cargar el historial del paciente');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (reservaNotas) {
-    return <NotasSesion reserva={reservaNotas} onVolver={() => setReservaNotas(null)} />;
+  if (historialSeleccionado) {
+    return (
+      <NotasSesion
+        reserva={{
+          id: historialSeleccionado.idReserva,
+          idPaciente: historialSeleccionado.pacienteId,
+          pacienteNombre: historialSeleccionado.pacienteNombre,
+          motivoConsulta: historialSeleccionado.motivoConsulta,
+          fechaReserva: historialSeleccionado.fechaCreacion,
+        }}
+        onVolver={() => setHistorialSeleccionado(null)}
+      />
+    );
   }
 
   return (
@@ -97,7 +106,7 @@ export default function HistorialClinico() {
                 onChange={e => setPacienteId(e.target.value)}
                 className="w-full bg-white border-2 border-[#E8DFD0] rounded-xl p-[.5rem] text-sm text-[#4a4238] focus:outline-none focus:ring-2 focus:ring-[#A8B5A0] focus:border-transparent"
               >
-                <option value="">Todos los pacientes</option>
+                <option value="">Selecciona un paciente</option>
                 {pacientes.map(p => (
                   <option key={p.id} value={p.id}>
                     {p.nombre} {p.apellidos}
@@ -131,7 +140,8 @@ export default function HistorialClinico() {
             />
           </div>
         </div>
-        <div>
+
+        <div className="flex flex-col justify-end">
           {error && <p className="text-red-500 text-xs mb-1">{error}</p>}
           <button
             type="submit"
@@ -145,73 +155,94 @@ export default function HistorialClinico() {
       </form>
 
       <div className="container-historial shadow" style={{ height: 'auto', padding: '0' }}>
-        <div>
-          {loading ? (
-            <div className="flex items-center justify-center py-16 text-zinc-400">
-              <div className="w-5 h-5 border-2 border-zinc-200 border-t-[#A8B5A0] rounded-full animate-spin mr-3" />
-              <span className="text-sm">Cargando...</span>
+        {loading ? (
+          <div className="flex items-center justify-center py-16 text-zinc-400">
+            <div className="w-5 h-5 border-2 border-zinc-200 border-t-[#A8B5A0] rounded-full animate-spin mr-3" />
+            <span className="text-sm">Cargando...</span>
+          </div>
+        ) : !buscado ? (
+          <div className="flex flex-col items-center justify-center py-16 text-zinc-400 p-[2rem]">
+            <ClipboardList className="w-8 h-8 mb-3 opacity-30" />
+            <p className="text-sm">Selecciona un paciente y presiona Buscar</p>
+          </div>
+        ) : historiales.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-zinc-400 p-[2rem]">
+            <ClipboardList className="w-8 h-8 mb-3 opacity-30" />
+            <p className="text-sm">Sin historial clínico registrado para este paciente</p>
+          </div>
+        ) : (
+          <div className="p-6">
+            <div className="sessions-table-wrapper">
+              <table className="sessions-table">
+                <thead>
+                  <tr>
+                    <th>Paciente</th>
+                    <th>Tipo Sesión</th>
+                    <th>Motivo</th>
+                    <th>Flags</th>
+                    <th>Fecha</th>
+                    <th>Notas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {historiales.map((h) => (
+                    <tr key={h.idHistorial}>
+                      <td>
+                        <div className="patient-cell">
+                          <span className="patient-name">{h.pacienteNombre ?? 'N/A'}</span>
+                          {h.pacienteRut && (
+                            <span className="text-xs text-zinc-400">{h.pacienteRut}</span>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <span className="badge badge-individual">
+                          {TIPO_SESION_LABELS[h.tipoSesion] ?? h.tipoSesion ?? 'N/A'}
+                        </span>
+                      </td>
+                      <td className="max-w-[180px] truncate" title={h.motivoConsulta}>
+                        {h.motivoConsulta ?? 'N/A'}
+                      </td>
+                      <td>
+                        <div className="flex gap-1.5 flex-wrap">
+                          {h.crisis && (
+                            <span className="text-xs bg-red-100 text-red-600 px-[.5rem] py-[.25rem] rounded-md font-medium">
+                              Crisis
+                            </span>
+                          )}
+                          {h.alta && (
+                            <span className="text-xs bg-green-100 text-green-600 px-[.5rem] py-[.25rem] rounded-md font-medium">
+                              Alta
+                            </span>
+                          )}
+                          {h.posibleAbandono && (
+                            <span className="text-xs bg-amber-100 text-amber-600 px-[.5rem] py-[.25rem] rounded-md font-medium">
+                              Abandono
+                            </span>
+                          )}
+                          {!h.crisis && !h.alta && !h.posibleAbandono && (
+                            <span className="text-xs text-zinc-300">—</span>
+                          )}
+                        </div>
+                      </td>
+                      <td>{formateaFecha(h.fechaCreacion)}</td>
+                      <td>
+                        <button
+                          onClick={() => setHistorialSeleccionado(h)}
+                          className="flex items-center text-[#4a4238] rounded-lg text-xs font-semibold"
+                          title="Ver notas de sesión"
+                        >
+                          <StickyNote className="w-5 h-5" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ) : (
-            <div className="p-6">
-              <div className="mb-8">
-                {reservasFiltradas.length > 0 ? (
-                  <div className="sessions-table-wrapper">
-                    <table className="sessions-table">
-                      <thead>
-                        <tr>
-                          <th>Paciente</th>
-                          <th>Modalidad</th>
-                          <th>Motivo</th>
-                          <th>Fecha</th>
-                          <th>Acción</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {reservasFiltradas.map((r, idx) => (
-                          <tr key={r.id || idx}>
-                            <td>
-                              <div className="patient-cell">
-                                <span className="patient-name">{r.pacienteNombre ?? 'N/A'}</span>
-                              </div>
-                            </td>
-                            <td>
-                              <span className="badge badge-individual">
-                                {r.modalidad === 'PRESENCIAL' ? 'Presencial' : r.modalidad === 'VIRTUAL' ? 'Virtual' : (r.modalidad ?? 'N/A')}
-                              </span>
-                            </td>
-                            <td className="max-w-[180px] truncate" title={r.motivoConsulta}>
-                              {r.motivoConsulta ?? 'N/A'}
-                            </td>
-                            <td>{formateaFecha(r.fechaReserva)}</td>
-                            <td>
-                              <button
-                                onClick={() => setReservaNotas(r)}
-                                className="flex items-center text-[#4a4238] rounded-lg text-xs font-semibold"
-                                title="Ver notas de sesión"
-                              >
-                                <StickyNote className="w-5 h-6" />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <div className="rounded-xl border border-zinc-200 p-10 text-center text-zinc-400">
-                    <CheckCircle className="w-8 h-8 mx-auto mb-3 opacity-30" />
-                    <p className="text-sm">No hay sesiones completadas</p>
-                  </div>
-                )}
-              </div>
-
-
-            </div>
-          )}
-        </div>
-
+          </div>
+        )}
       </div>
-
     </section>
   );
 }

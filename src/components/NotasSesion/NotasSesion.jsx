@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Plus, Trash2, StickyNote, Pencil, Sparkles, Check, X, ClipboardList } from 'lucide-react';
-import { apiGet, apiPost, apiPut, apiDelete } from '../../api/apiClient';
+import { ArrowLeft, Plus, Trash2, StickyNote, Pencil, Sparkles, Check, X, ClipboardList, ListRestart, ListRestartIcon } from 'lucide-react';
+import { apiGet, apiPost, apiPatch, apiDelete } from '../../api/apiClient';
 import { formateaFecha } from '../../constants/estados';
-import DetalleHistorialModal from '../DetalleHistorialModal/DetalleHistorialModal';
 import '../Historial/Historial.css';
+import AgenteIAModal from '../AgenteIAModal/AgenteIAModal';
 
 export default function NotasSesion({ reserva, onVolver }) {
-  const [historial, setHistorial] = useState(null);
+  const [noHistorial, setNoHistorial] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const [notas, setNotas] = useState([]);
   const [nuevaNota, setNuevaNota] = useState('');
   const [loading, setLoading] = useState(true);
@@ -14,40 +15,37 @@ export default function NotasSesion({ reserva, onVolver }) {
   const [agregando, setAgregando] = useState(false);
   const [editandoId, setEditandoId] = useState(null);
   const [editandoTexto, setEditandoTexto] = useState('');
-  const [modalHistorial, setModalHistorial] = useState(false);
+  const [agenteNota, setAgenteNota] = useState(null);
 
   const pacienteId = reserva?.idPaciente ?? reserva?.pacienteId;
 
   useEffect(() => {
-    if (!pacienteId) {
+    if (!reserva?.id) {
       setLoading(false);
       return;
     }
-    apiGet(`/admin/historial/paciente/${pacienteId}`)
+    apiGet(`/admin/notas/reserva/${reserva.id}`)
       .then(data => {
-        const lista = Array.isArray(data?.entidad) ? data.entidad : [];
-        const h = lista.find(h => String(h.idReserva) === String(reserva.id));
-        if (h) {
-          setHistorial(h);
-          setNotas(Array.isArray(h.notasSesion) ? h.notasSesion : []);
+        if (data?.code === 200) setNotas(data.entidad ?? []);
+      })
+      .catch(e => {
+        const msg = e?.message ?? '';
+        if (msg.includes('404') || msg.includes('HistorialPaciente')) {
+          setNoHistorial(true);
+        } else {
+          setLoadError(true);
         }
       })
-      .catch(() => setError('No se pudo cargar el historial de esta sesión'))
       .finally(() => setLoading(false));
-  }, [pacienteId, reserva?.id]);
+  }, [reserva?.id]);
 
   const handleAgregarNota = async () => {
-    if (!nuevaNota.trim() || !historial?.idHistorial) return;
+    if (!nuevaNota.trim() || noHistorial) return;
     setAgregando(true);
     setError('');
     try {
-      const resp = await apiPost(`/admin/nota/nueva/${historial.idHistorial}`, { nota: nuevaNota.trim() });
-      const notaCreada = resp?.entidad || {
-        nota: nuevaNota.trim(),
-        idNota: Date.now(),
-        fechaCreacion: new Date().toISOString(),
-      };
-      setNotas(prev => [...prev, notaCreada]);
+      const resp = await apiPost('/admin/notas', { idReserva: reserva.id, nota: nuevaNota.trim() });
+      setNotas(prev => [...prev, resp?.entidad]);
       setNuevaNota('');
     } catch (e) {
       setError(e.message || 'Error al agregar la nota');
@@ -59,7 +57,7 @@ export default function NotasSesion({ reserva, onVolver }) {
   const handleEliminarNota = async (idNota) => {
     setError('');
     try {
-      await apiDelete(`/admin/nota/eliminar/${idNota}`);
+      await apiDelete(`/admin/notas/${idNota}`);
       setNotas(prev => prev.filter(n => n.idNota !== idNota));
     } catch (e) {
       setError(e.message || 'Error al eliminar la nota');
@@ -75,7 +73,7 @@ export default function NotasSesion({ reserva, onVolver }) {
     if (!editandoTexto.trim()) return;
     setError('');
     try {
-      await apiPut(`/admin/nota/editar/${idNota}`, { nota: editandoTexto.trim() });
+      await apiPatch(`/admin/notas/${idNota}`, { nota: editandoTexto.trim() });
       setNotas(prev => prev.map(n => n.idNota === idNota ? { ...n, nota: editandoTexto.trim() } : n));
       setEditandoId(null);
     } catch (e) {
@@ -83,29 +81,14 @@ export default function NotasSesion({ reserva, onVolver }) {
     }
   };
 
-  const handleHistorialCreado = (h) => {
-    setHistorial(h);
-    setNotas(Array.isArray(h.notasSesion) ? h.notasSesion : []);
-    setModalHistorial(false);
-  };
-
   return (
     <section className="historial">
       <div className="container-historial shadow" style={{ height: 'auto' }}>
 
         {/* Header */}
-        <div className="flex items-center justify-between gap-4 mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-[#4a4238]">Notas de Sesión</h2>
-            <p className="text-sm text-zinc-500">{formateaFecha(reserva?.fechaReserva)}</p>
-          </div>
-          <button
-            onClick={() => setModalHistorial(true)}
-            className="px-3 py-1.5 bg-[#A8B5A0] text-white rounded-lg text-xs font-semibold hover:bg-[#8fa587] transition-colors whitespace-nowrap flex items-center gap-1.5"
-          >
-            <ClipboardList className="w-3.5 h-3.5" />
-            Nueva nota
-          </button>
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-[#4a4238]">Notas de Sesión</h2>
+          <p className="text-sm text-zinc-500">{formateaFecha(reserva?.fechaReserva)}</p>
         </div>
 
         {/* Ficha resumen */}
@@ -126,57 +109,75 @@ export default function NotasSesion({ reserva, onVolver }) {
 
         {/* Contenido notas */}
         <div className="my-[1.5rem]">
-          <div className="p-6">
-            {loading ? (
-              <div className="flex items-center justify-center py-16 text-zinc-400">
-                <div className="w-5 h-5 border-2 border-zinc-200 border-t-[#A8B5A0] rounded-full animate-spin mr-3" />
-                <span className="text-sm">Cargando notas...</span>
-              </div>
-            ) : !pacienteId ? (
-              <div className="text-center py-12 text-zinc-400">
-                <StickyNote className="w-8 h-8 mx-auto mb-3 opacity-30" />
-                <p className="text-sm">No se puede identificar al paciente para cargar las notas</p>
-              </div>
-            ) : !historial ? (
-              <div className="text-center py-12 text-zinc-400">
-                <ClipboardList className="w-8 h-8 mx-auto mb-3 opacity-30" />
-                <p className="text-sm">No hay historial clínico registrado para esta sesión</p>
-                <p className="text-xs mt-2">Crea el historial clínico usando el botón de arriba</p>
-              </div>
-            ) : (
-              <div>
-                <div className="flex items-center gap-2 mb-5">
-                  <StickyNote className="w-5 h-5 text-[#A8B5A0]" />
-                  <h3 className="text-base font-semibold text-[#4a4238]">
-                    Notas
-                    <span className="ml-2 text-xs font-normal text-zinc-400">({notas.length})</span>
-                  </h3>
+          {loading ? (
+            <div className="flex items-center justify-center py-16 text-zinc-400">
+              <div className="w-5 h-5 border-2 border-zinc-200 border-t-[#A8B5A0] rounded-full animate-spin mr-3" />
+              <span className="text-sm">Cargando notas...</span>
+            </div>
+          ) : !pacienteId ? (
+            <div className="text-center py-12 text-zinc-400">
+              <StickyNote className="w-8 h-8 mx-auto mb-3 opacity-30" />
+              <p className="text-sm">No se puede identificar al paciente para cargar las notas</p>
+            </div>
+          ) : noHistorial ? (
+            <div className="text-center py-12 text-zinc-400">
+              <ClipboardList className="w-8 h-8 mx-auto mb-3 opacity-30" />
+              <p className="text-sm">No hay historial clínico registrado para esta sesión</p>
+            </div>
+          ) : (
+            <div>
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+                  {error}
                 </div>
+              )}
 
-                {error && (
-                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
-                    {error}
-                  </div>
-                )}
-
-                <div className="space-y-3 mb-5">
-                  {notas.length === 0 ? (
-                    <div className="rounded-xl border border-zinc-200 p-8 text-center text-zinc-400">
-                      <p className="text-sm">Sin notas registradas en esta sesión</p>
+              <div className="space-y-3">
+                {notas.length === 0 ? (
+                  <div className="rounded-xl p-4 bg-amber-50 p-[1rem]">
+                    <div className="flex items-start gap-3">
+                      <textarea
+                        value={nuevaNota}
+                        onChange={e => setNuevaNota(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleAgregarNota()}
+                        rows={3}
+                        placeholder="Agregar una nota..."
+                        className="flex-1 bg-transparent focus:outline-none placeholder"
+                        autoFocus
+                      />
+                      <div className="flex flex-col gap-1.5 flex-shrink-0">
+                        <button
+                          onClick={handleAgregarNota}
+                          disabled={!nuevaNota.trim() || agregando}
+                          className="p-1.5 bg-[#A8B5A0] text-white rounded-lg hover:bg-[#8fa587] transition-colors disabled:opacity-50"
+                          title="Guardar nota"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => setNuevaNota('')}
+                          className="p-1.5 bg-zinc-200 text-zinc-600 rounded-lg hover:bg-zinc-300 transition-colors"
+                          title="Limpiar"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
-                  ) : (
-                    notas.map((n) => (
+                  </div>
+                ) : (
+                  <>
+                    {notas.map((n) => (
                       <div
                         key={n.idNota}
-                        className="rounded-xl p-4 border border-amber-200 bg-amber-50"
+                        className="rounded-xl p-4 bg-amber-50 mb-[1rem]"
                       >
                         {editandoId === n.idNota ? (
-                          <div className="flex gap-2 items-start">
+                          <div className="flex gap-2 items-start p-[1rem]">
                             <textarea
                               value={editandoTexto}
                               onChange={e => setEditandoTexto(e.target.value)}
                               rows={2}
-                              className="flex-1 bg-white border-2 border-[#E8DFD0] rounded-xl px-3 py-2 text-sm text-[#4a4238] focus:outline-none focus:ring-2 focus:ring-[#A8B5A0] focus:border-transparent resize-none"
+                              className="flex-1 bg-amber-50 rounded-xl px-3 py-2 text-sm text-[#4a4238] focus:outline-none focus:border-transparent"
                               autoFocus
                             />
                             <div className="flex flex-col gap-1.5">
@@ -192,12 +193,12 @@ export default function NotasSesion({ reserva, onVolver }) {
                                 className="p-1.5 bg-zinc-200 text-zinc-600 rounded-lg hover:bg-zinc-300 transition-colors"
                                 title="Cancelar"
                               >
-                                <X className="w-3.5 h-3.5" />
+                                <ListRestartIcon className="w-3.5 h-3.5" />
                               </button>
                             </div>
                           </div>
                         ) : (
-                          <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-start justify-between gap-3 p-[1rem]">
                             <p className="text-sm text-[#4a4238] flex-1 leading-relaxed">{n.nota}</p>
                             <div className="flex items-center gap-1.5 flex-shrink-0">
                               {n.fechaCreacion && (
@@ -207,6 +208,7 @@ export default function NotasSesion({ reserva, onVolver }) {
                               )}
                               <button
                                 title="Asistente IA"
+                                onClick={() => setAgenteNota(n)}
                                 className="p-1.5 text-violet-400 hover:text-violet-600 hover:bg-violet-50 rounded-lg transition-colors"
                               >
                                 <Sparkles className="w-3.5 h-3.5" />
@@ -229,32 +231,31 @@ export default function NotasSesion({ reserva, onVolver }) {
                           </div>
                         )}
                       </div>
-                    ))
-                  )}
-                </div>
+                    ))}
 
-                {/* Input nueva nota */}
-                <div className="flex gap-2 pt-4 border-t border-zinc-100">
-                  <input
-                    type="text"
-                    value={nuevaNota}
-                    onChange={e => setNuevaNota(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && handleAgregarNota()}
-                    placeholder="Escribir una nueva nota..."
-                    className="flex-1 bg-white border-2 border-[#E8DFD0] rounded-xl px-4 py-2.5 text-sm text-[#4a4238] focus:outline-none focus:ring-2 focus:ring-[#A8B5A0] focus:border-transparent"
-                  />
-                  <button
-                    onClick={handleAgregarNota}
-                    disabled={!nuevaNota.trim() || agregando}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-[#A8B5A0] text-white rounded-xl font-semibold text-sm hover:bg-[#8fa587] transition-colors disabled:opacity-50 whitespace-nowrap"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Agregar
-                  </button>
-                </div>
+                    <div className="flex gap-2 pt-4 border-t border-zinc-100 mt-[1rem]">
+                      <input
+                        type="text"
+                        value={nuevaNota}
+                        onChange={e => setNuevaNota(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handleAgregarNota()}
+                        placeholder="Agregar otra nota..."
+                        className="flex-1 bg-white rounded-xl mt-[1rem] px-[1rem] py-[0.625rem] text-sm focus:outline-none focus:border-transparent"
+                      />
+                      <button
+                        onClick={handleAgregarNota}
+                        disabled={!nuevaNota.trim() || agregando}
+                        className="flex items-center gap-2 mt-[1rem] px-[1rem] py-[0.625rem] bg-[#A8B5A0] text-white rounded-xl font-semibold text-sm hover:bg-[#8fa587] transition-colors disabled:opacity-50 whitespace-nowrap"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Agregar
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -268,13 +269,14 @@ export default function NotasSesion({ reserva, onVolver }) {
         </button>
       </div>
 
-      {modalHistorial && (
-        <DetalleHistorialModal
-          historial={{ idReserva: reserva?.id }}
-          modo="crear"
-          pacienteId={pacienteId}
-          onClose={() => setModalHistorial(false)}
-          onGuardado={handleHistorialCreado}
+      {agenteNota && (
+        <AgenteIAModal
+          nota={agenteNota}
+          reserva={reserva}
+          onClose={() => setAgenteNota(null)}
+          onNotaGuardada={(nuevaNota) => {
+            if (nuevaNota) setNotas(prev => [...prev, nuevaNota]);
+          }}
         />
       )}
     </section>

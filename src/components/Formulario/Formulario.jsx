@@ -347,9 +347,10 @@ export default function Formulario() {
 
                   <div className="flex flex-wrap gap-4 my-[1rem]">
                     {[
-                      { name: 'crisis', label: 'Crisis' },
-                      { name: 'alta', label: 'Alta' },
-                      { name: 'posibleAbandono', label: 'Posible Abandono' },
+                      { name: 'leve', label: 'Leve' },
+                      { name: 'moderada', label: 'Moderada' },
+                      { name: 'grave', label: 'Grave' },
+                      { name: 'crisis', label: 'Crisis' }
                     ].map(({ name, label }) => (
                       <label key={name} className="flex items-center gap-2 cursor-pointer select-none">
                         <input

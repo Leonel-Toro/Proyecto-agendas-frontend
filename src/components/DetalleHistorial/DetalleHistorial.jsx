@@ -13,7 +13,13 @@ export default function DetalleHistorial({
   onCompletar,
   isAdmin,
 }) {
-  const rows = Array.isArray(contenido) ? contenido : [];
+  const ORDER = { PENDIENTE: 0, CONFIRMADA: 1, COMPLETADA: 2, CANCELADA: 3 };
+  const rows = (Array.isArray(contenido) ? contenido : [])
+    .slice()
+    .sort((a, b) =>
+      (ORDER[a.estado] ?? 99) - (ORDER[b.estado] ?? 99) ||
+      new Date(b.fechaReserva) - new Date(a.fechaReserva)
+    );
 
   return (
     <>
@@ -29,7 +35,6 @@ export default function DetalleHistorial({
                 <th>Paciente</th>
                 <th>Psicólogo</th>
                 <th>Modalidad</th>
-                <th>Motivo</th>
                 <th>Precio</th>
                 <th>Abonado</th>
                 <th>Fecha</th>
@@ -53,9 +58,6 @@ export default function DetalleHistorial({
                     <span className="badge badge-individual">
                       {item.modalidad === 'PRESENCIAL' ? 'Presencial' : item.modalidad === 'VIRTUAL' ? 'Virtual' : (item.modalidad ?? 'N/A')}
                     </span>
-                  </td>
-                  <td className="max-w-[160px] truncate" title={item.motivoConsulta}>
-                    {item.motivoConsulta ?? 'N/A'}
                   </td>
                   <td>{formateaPrecio(item.precio)}</td>
                   <td>{formateaPrecio(item.abonado ?? 0)}</td>

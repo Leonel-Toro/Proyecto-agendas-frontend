@@ -199,7 +199,7 @@ export default function NotasSesion({ reserva, onVolver }) {
                           </div>
                         ) : (
                           <div className="flex items-start justify-between gap-3 p-[1rem]">
-                            <p className="text-sm text-[#4a4238] flex-1 leading-relaxed">{n.nota}</p>
+                            <p className="text-sm text-[#4a4238] flex-1 leading-relaxed whitespace-pre-wrap">{n.nota}</p>
                             <div className="flex items-center gap-1.5 flex-shrink-0">
                               {n.fechaCreacion && (
                                 <span className="text-xs text-amber-500 hidden sm:block mr-1">

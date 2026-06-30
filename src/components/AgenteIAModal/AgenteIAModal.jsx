@@ -75,7 +75,7 @@ export default function AgenteIAModal({ nota, reserva, onClose, onNotaGuardada }
         </div>
       )}
 
-      <div className="modal-content" style={{ maxWidth: '620px' }}>
+      <div className="modal-content">
         {/* Header */}
         <div
           className="modal-header-decorative"
@@ -95,19 +95,19 @@ export default function AgenteIAModal({ nota, reserva, onClose, onNotaGuardada }
 
         <div className="modal-body">
           {/* Nota original */}
-          <div className="mb-5">
+          <div className="mb-[1.5rem]">
             <p className="text-xs font-semibold text-violet-600 uppercase tracking-wide mb-2">
               Nota de sesión
             </p>
-            <div className="rounded-xl p-4 bg-amber-50 border border-amber-100 text-sm text-[#4a4238] leading-relaxed">
+            <div className="rounded-xl p-[1.2rem] bg-amber-50 border border-amber-100 text-sm text-[#4a4238] leading-relaxed">
               {nota.nota}
             </div>
           </div>
 
           {/* Input de consulta — visible solo cuando no hay respuesta */}
           {!respuesta && !consultando && (
-            <div className="mb-2">
-              <p className="text-xs font-semibold text-[#4a4238] uppercase tracking-wide mb-2">
+            <div className="mb-[1.5rem]">
+              <p className="text-xs font-semibold text-[#4a4238] uppercase tracking-wide mb-[0.3rem]">
                 Tu consulta
               </p>
               <textarea
@@ -127,7 +127,7 @@ export default function AgenteIAModal({ nota, reserva, onClose, onNotaGuardada }
 
           {/* Estado cargando */}
           {consultando && (
-            <div className="flex items-center justify-center py-10 text-violet-400 gap-3">
+            <div className="flex items-center justify-center py-[2.5rem] text-violet-400 gap-3">
               <div className="w-5 h-5 border-2 border-violet-200 border-t-violet-500 rounded-full animate-spin" />
               <span className="text-sm font-medium">Melia está pensando...</span>
             </div>
@@ -135,8 +135,8 @@ export default function AgenteIAModal({ nota, reserva, onClose, onNotaGuardada }
 
           {/* Respuesta de Melia */}
           {respuesta && (
-            <div className="mb-2">
-              <div className="flex items-center gap-2 mb-2">
+            <div className="mb-[1.5rem]">
+              <div className="flex items-center gap-2 mb-[0.3rem]">
                 <Bot className="w-4 h-4 text-violet-500" />
                 <p className="text-xs font-semibold text-violet-600 uppercase tracking-wide">
                   Respuesta de Melia
